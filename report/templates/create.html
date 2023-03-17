@@ -1,0 +1,6 @@
+
+<form action="/firstPage/" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit", name="save">Save</button>
+</form>
