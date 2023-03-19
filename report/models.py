@@ -6,3 +6,4 @@ class SearchLog(models.Model):
     iswp = models.BooleanField(default=False)
     search_time = models.DateTimeField(auto_now=True)
 
+

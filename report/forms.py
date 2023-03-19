@@ -52,3 +52,4 @@ class YearThree(forms.Form):
     insurance = forms.CharField(label="Insurance", max_length=200)
     reserve = forms.CharField(label="Reserve", max_length=200)
 
+

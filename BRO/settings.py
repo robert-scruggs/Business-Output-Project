@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "django.contrib.sessions",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -78,7 +79,7 @@ WSGI_APPLICATION = "BRO.wsgi.application"
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'djangopractice',
+        'NAME': 'practice_database',
         'USER': 'root',
         'PASSWORD': 'Mangomelon@5',
         'HOST': '127.0.0.1',
