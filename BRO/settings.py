@@ -79,7 +79,7 @@ WSGI_APPLICATION = "BRO.wsgi.application"
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'practice_database',
+        'NAME': 'prac_database',
         'USER': 'root',
         'PASSWORD': 'Mangomelon@5',
         'HOST': '127.0.0.1',

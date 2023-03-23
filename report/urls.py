@@ -9,13 +9,17 @@ from . import views
 # first column: which endpoint you are working on
 # second column: which method from views you will use
 
+#think of these mfs like rooms!!!!!!!!!!!!!!!!
+#create the rooms and then run a function to tell system what to show and do in room
+
 
 urlpatterns = [
     path('', views.firstPage),
     path('yearOne/', views.yearOne),
     path('yearTwo/', views.yearTwo),
     path('yearThree/', views.yearThree),
-    path('success/', views.success)
+    path('success/', views.success),
+    path('suc/', views.success)
     
 
 ]
