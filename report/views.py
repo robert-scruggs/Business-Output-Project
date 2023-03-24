@@ -21,12 +21,12 @@ def firstPage(request):
         form = BasicInformationForm(request.POST)
 
         if form.is_valid():
-            f = form.cleaned_data["financeReview"]
-            oc = form.cleaned_data['operatingCompany']
-            pc = form.cleaned_data['parentCompany']
-            bo = form.cleaned_data['businessOwners']
-            pba = form.cleaned_data['primaryBusinessAddress']
-            lro = form.cleaned_data['listOfReportOutcomes']
+            f = form.cleaned_data["finance_review"]
+            oc = form.cleaned_data['operating_company']
+            pc = form.cleaned_data['parent_company']
+            bo = form.cleaned_data['business_owners']
+            pba = form.cleaned_data['primary_business_address']
+            lro = form.cleaned_data['list_of_report_outcomes']
             form.save()
             print(f,oc,pc,bo,pba,lro)
             
@@ -42,14 +42,14 @@ def yearOne(request):
         form = TaxYearsForm(request.POST)
         if form.is_valid():
             a = form.cleaned_data["state"]
-            nol = form.cleaned_data['numOfLocations']
-            ts = form.cleaned_data['totalSales']
-            fc = form.cleaned_data['foodCost']
-            lc = form.cleaned_data['laborCost']
-            ag = form.cleaned_data['adminAndGeneral']
-            rs = form.cleaned_data['randsMarketing']
-            ibfe = form.cleaned_data['incomeBeforeFixExpense']
-            pt = form.cleaned_data['propertyTax']
+            nol = form.cleaned_data['num_of_locations']
+            ts = form.cleaned_data['total_sales']
+            fc = form.cleaned_data['food_cost']
+            lc = form.cleaned_data['labor_cost']
+            ag = form.cleaned_data['admin_and_general']
+            rs = form.cleaned_data['rands_marketing']
+            ibfe = form.cleaned_data['income_before_fix_expense']
+            pt = form.cleaned_data['property_tax']
             insurance = form.cleaned_data['insurance']
             reserve = form.cleaned_data['reserve']
             form.save()

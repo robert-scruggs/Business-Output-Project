@@ -16,33 +16,33 @@ from .models import BasicInformation, TaxYears
 #    listOfReportOutcomes = forms.CharField(label="Package will include", max_length=200)
 
 class BasicInformationForm(ModelForm):
-    financeReview = forms.CharField(max_length=255, label="What is the name of the proposed project for financing review?")
-    operatingCompany = forms.CharField(max_length=255, label="Operating Company")
-    parentCompany = forms.CharField(max_length=255, label="Parent Company")
-    businessOwners = forms.CharField(max_length=255, label="Business Owners", help_text="(Separate business owners with commas)")
-    primaryBusinessAddress = forms.CharField(max_length=255, label="Primary Business Address")
-    listOfReportOutcomes = forms.CharField(max_length=255, label="List of Report Outcomes")
+    finance_review = forms.CharField(max_length=255, label="What is the name of the proposed project for financing review?")
+    operating_company = forms.CharField(max_length=255, label="Operating Company")
+    parent_company = forms.CharField(max_length=255, label="Parent Company")
+    business_owners = forms.CharField(max_length=255, label="Business Owners", help_text="(Separate business owners with commas)")
+    primary_business_address = forms.CharField(max_length=255, label="Primary Business Address")
+    list_of_report_outcomes = forms.CharField(max_length=255, label="List of Report Outcomes")
     class Meta:
         model = BasicInformation
-        fields = ['financeReview','operatingCompany', 'parentCompany', 'businessOwners', 'primaryBusinessAddress','listOfReportOutcomes']
+        fields = ['finance_review','operating_company', 'parent_company', 'business_owners', 'primary_business_address','list_of_report_outcomes']
         
 
 
 class TaxYearsForm(ModelForm):
     state = forms.TextInput()
-    numOfLocations = forms.TextInput()
-    totalSales = forms.TextInput()
-    foodCost = forms.TextInput()
-    laborCost = forms.TextInput()
-    adminAndGeneral = forms.TextInput()
-    randsMarketing = forms.TextInput()
-    incomeBeforeFixExpense = forms.TextInput()
-    propertyTax = forms.TextInput()
+    num_of_locations = forms.TextInput()
+    total_sales = forms.TextInput()
+    food_cost = forms.TextInput()
+    labor_cost = forms.TextInput()
+    admin_and_general = forms.TextInput()
+    rands_marketing = forms.TextInput()
+    income_before_fix_expense = forms.TextInput()
+    property_tax = forms.TextInput()
     insurance = forms.TextInput()
     reserve = forms.TextInput()
     class Meta:
         model = TaxYears
-        fields = ['state','numOfLocations', 'totalSales', 'foodCost', 'laborCost','adminAndGeneral', 'randsMarketing', 'incomeBeforeFixExpense', 'propertyTax','insurance','reserve']    
+        fields = ['state','num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general', 'rands_marketing', 'income_before_fix_expense', 'property_tax','insurance','reserve']    
 
 class YearTwo(forms.Form):
     area = forms.CharField(label="What state does your business operate out of", max_length=200)
@@ -56,6 +56,7 @@ class YearTwo(forms.Form):
     propertyTax = forms.CharField(label="Property Tax", max_length=200)
     insurance = forms.CharField(label="Insurance", max_length=200)
     reserve = forms.CharField(label="Reserve", max_length=200)
+    
 
 
 class YearThree(forms.Form):
