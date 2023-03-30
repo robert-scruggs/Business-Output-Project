@@ -18,5 +18,6 @@ urlpatterns = [
     path('yearOne/', views.yearOne),
     path('yearTwo/', views.yearTwo),
     path('yearThree/', views.yearThree),
+    path('taxyears/', views.yearThree),
     path('success/', views.success)
 ]

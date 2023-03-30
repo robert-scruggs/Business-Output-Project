@@ -3,14 +3,6 @@ from django.db import models
 #populate models with data from the forms.py you fucking dumb idiot
 # Create your models here.
 
-#class BasicInformatio(models.Model):
-    #financeReview = forms.CharField(label="Proposed Project for Financing Review", max_length=200)
-    #operatingCompany = forms.CharField(label="Operating Company", max_length=200)
-    #parentComapny = forms.CharField(label="Parent Company", max_length=200)
-    #businessOwners = forms.CharField(label="Business Owners", max_length=200)
-    #primaryBusinessAddress = forms.CharField(label="Primary Business Address", max_length=200)
-    #listOfReportOutcomes = forms.CharField(label="Package will include", max_length=200)
-
 class BasicInformation(models.Model):
     finance_review = models.CharField(max_length=200)
     operating_company = models.CharField(max_length=200)
@@ -19,7 +11,8 @@ class BasicInformation(models.Model):
     primary_business_address = models.CharField(max_length=200)
     list_of_report_outcomes = models.CharField(max_length=200)
  
-class TaxYears(models.Model):
+class OperatingYears(models.Model):
+    
     state = models.CharField(max_length=200)
     num_of_locations = models.CharField(max_length=200)
     total_sales = models.CharField(max_length=200)
@@ -27,10 +20,17 @@ class TaxYears(models.Model):
     labor_cost = models.CharField(max_length=200)
     admin_and_general = models.CharField(max_length=200)
     rands_marketing = models.CharField(max_length=200)
+    facilities = models.CharField(max_length=200)
+    total_other_operative_expenses = models.CharField(max_length=200)
+    total_operative_expenses = models.CharField(max_length=200)
     income_before_fix_expense = models.CharField(max_length=200)
     property_tax = models.CharField(max_length=200)
     insurance = models.CharField(max_length=200)
     reserve = models.CharField(max_length=200)
+    total_fix_expenses = models.CharField(max_length=200)
+    net_income_before_interest_and_tax = models.CharField(max_length=200)
+    percentages = models.CharField(max_length=200)
+
 
 class PersonalFinancialStatement(models.Model):
     cash = models.CharField(max_length=200)
@@ -55,10 +55,38 @@ class PersonalFinancialStatement(models.Model):
     net_worth = models.CharField(max_length=200)
     grand_total = models.CharField(max_length=200)
 
-#class FinancialFlashReport(models.Model):
+class FinancialFlashReport(models.Model):
     company_name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     owner_name = models.CharField(max_length=200)
     years_in_current_business = models.CharField(max_length=200)
     current_business_structure = models.CharField(max_length=200)
+    
+class TaxYears(models.Model):
+    date_of_statement = models.CharField(max_length=200)
+    marketable_securities = models.CharField(max_length=200)
+    cash_from_sales = models.CharField(max_length=200)
+    gross_cash_income = models.CharField(max_length=200)
+    cash_operating_expenses = models.CharField(max_length=200)
+    other_income = models.CharField(max_length=200)
+    net_cash_after_operations = models.CharField(max_length=200)
+    m1_net_deductions = models.CharField(max_length=200)
+    m2_net_deductions = models.CharField(max_length=200)
+    ending_cash_position = models.CharField(max_length=200)
+    depreciation = models.CharField(max_length=200)
+    amortization = models.CharField(max_length=200)
+    interest = models.CharField(max_length=200)
+    nre = models.CharField(max_length=200)
+    owners_management_fees = models.CharField(max_length=200)
+    cash_flow = models.CharField(max_length=200)
+    operational_cash = models.CharField(max_length=200)
+    available_cash = models.CharField(max_length=200)
+    new_debt_services = models.CharField(max_length=200)
+    surplus = models.CharField(max_length=200)
+    coverage_ratio = models.CharField(max_length=200)
+    financial_footnotes = models.CharField(max_length=200)
+
+class Uploads(models.Model):
+    personal_financial_statement = models.FileField()
+    tax_returns = models.FileField()
     
