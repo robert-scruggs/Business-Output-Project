@@ -289,6 +289,7 @@ def getM1Deductions():
     print(line13AList,line4BList)
     print(firstm1)
     print(m1DeductionsList)
+    return m1DeductionsList
 
 def getM2Deductions():
     netCashAfterOperationsPages = []
@@ -314,8 +315,19 @@ def getM2Deductions():
         print(x)
     return netCashAfterOperationsList
 
-getM2Deductions()
+def getEndingCashPosition():
+    netCashList = getNetCashAfterOperations()
+    m1DeductionsList = getM1Deductions()
+    m2DeductionsList = getM2Deductions()
 
+    endingCashPositionList = []
+    for x,y,z in zip(netCashList,m1DeductionsList,m2DeductionsList):
+        sum = x - y - z
+        endingCashPositionList.append(sum)
+    print("Net cash list:", netCashList, "M1:", m1DeductionsList, "M2:", m2DeductionsList)
+    print(endingCashPositionList)
+
+getEndingCashPosition()
 # pdf = pdfplumber.open(listoffiles[1])
 # page = pdf.pages[21].extract_text().split(" ")
 # indextorecall = pdf.pages[21].extract_text().split(" ").index("(itemize):\n3")
