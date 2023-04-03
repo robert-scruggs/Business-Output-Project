@@ -227,14 +227,6 @@ def getNetCashAfterOperations():
         print(x)
     return netCashAfterOperationsList
 
-# m1 deductions comes from schedule k line 13a + schedule m1 line 4b, use two helper functions to get the result you need
-
-
-def getM1Deductions():
-    line13AList = getScheduleKLine13A()
-    line4BList = getScheduleM1Line4B()
-
-
 def getScheduleKLine13A():
     netCashAfterOperationsPages = []
     for file in listoffiles:
@@ -266,26 +258,71 @@ def getScheduleM1Line4B():
         for page in pdf.pages:
             currList = page.extract_text().split(" ")
             for item in currList:
-                if "16c\nsnoitcasnarT\nForeign" and "level\ndPassive" in item:
+                if "7~~~~~~~~~~~~~\nbTravel" in item:
                     print("found")
                     netCashAfterOperationsPages.append(page.extract_text())
     netCashAfterOperationsList = []
     counter = 1
     for x in range(1, len(netCashAfterOperationsPages), 2):
-        keepTrack = netCashAfterOperationsPages[counter].split(
-            " ").index("13a") + 1
-        cashOperatingExpense = netCashAfterOperationsPages[counter].split(
-            " ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "").replace("-", "")
-        netCashAfterOperationsList.append(int(cashOperatingExpense))
+        keepTrack = netCashAfterOperationsPages[counter].split(" ").index("7~~~~~~~~~~~~~\nbTravel") + 5
+        cashOperatingExpense = netCashAfterOperationsPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "").replace("-", "")
+        if int(cashOperatingExpense) == 9:
+            cashOperatingExpense = netCashAfterOperationsPages[counter].split(" ")[keepTrack - 1].split("\n")[0].replace(",", "").replace(".", "").replace("-", "")
+            netCashAfterOperationsList.append(int(cashOperatingExpense))
+        else:
+            netCashAfterOperationsList.append(int(cashOperatingExpense))
+        counter = counter + 2
+    for x in netCashAfterOperationsList:
+        print(x)
+    return netCashAfterOperationsList
+# m1 deductions comes from schedule k line 13a + schedule m1 line 4b, use two helper functions to get the result you need
+# it works but one of the numbers dont add up, i belive its the original pdf sent to me because all other numbers add up
+# will have to edit a little bit but it works as expected right now
+def getM1Deductions():
+    line13AList = getScheduleKLine13A()
+    line4BList = getScheduleM1Line4B()
+    m1DeductionsList = []
+    firstm1 = line13AList[1] + line4BList[1]
+    for x, y in zip(line13AList,line4BList):
+        sum = x + y
+        m1DeductionsList.append(sum)
+    print(line13AList,line4BList)
+    print(firstm1)
+    print(m1DeductionsList)
+
+def getM2Deductions():
+    netCashAfterOperationsPages = []
+    for file in listoffiles:
+        pdf = pdfplumber.open(file)
+        for page in pdf.pages:
+            currList = page.extract_text().split(" ")
+            for item in currList:
+                if "7~~~~~~~~~~~~~\nbTravel" in item:
+                    print("found")
+                    netCashAfterOperationsPages.append(page.extract_text())
+    netCashAfterOperationsList = []
+    counter = 1
+    for x in range(1, len(netCashAfterOperationsPages), 2):
+        keepTrack = netCashAfterOperationsPages[counter].split(" ").index("(itemize):\n3")
+        cashOperatingExpense = netCashAfterOperationsPages[counter].split(" ")[keepTrack].split("\n")[1]
+        if int(cashOperatingExpense) == 3:
+            netCashAfterOperationsList.append(0)
+        else:
+            netCashAfterOperationsList.append(int(cashOperatingExpense))
         counter = counter + 2
     for x in netCashAfterOperationsList:
         print(x)
     return netCashAfterOperationsList
 
+getM2Deductions()
 
-pdf = pdfplumber.open(listoffiles[1])
-page = pdf.pages[23].extract_text().split(" ")
-indextorecall = pdf.pages[23].extract_text().split(" ").index("4b.") + 1
-depreciation = pdf.pages[23].extract_text().split(" ")[indextorecall].split(
-    "\n")[0].replace(",", "").replace(".", "").replace("-", "")
-print(page, depreciation)
+# pdf = pdfplumber.open(listoffiles[1])
+# page = pdf.pages[21].extract_text().split(" ")
+# indextorecall = pdf.pages[21].extract_text().split(" ").index("(itemize):\n3")
+# #depreciation = pdf.pages[21].extract_text().split(" ")[indextorecall].split("\n")[0].replace(",", "").replace(".", "").replace("-", "")
+# depreciation = pdf.pages[21].extract_text().split(" ")[indextorecall].split("\n")[0].index(":") + 1
+# if int(pdf.pages[21].extract_text().split(" ")[indextorecall].split("\n")[1]) == 3:
+#     print("number")
+# else:
+#     print(0)
+#print(pdf.pages[21].extract_text().split(" ")[indextorecall].split("\n"))
