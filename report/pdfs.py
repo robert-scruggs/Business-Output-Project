@@ -1,14 +1,13 @@
-import PyPDF2
 import pdfplumber
 
-listoffiles = ["6_2014 Income Tax Return_CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf",
-               "6_2014_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
-               "6_2015 Income Tax Return_ CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf",
-               "6_2015 Income Tax Return_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
-               "6_2016 Income Tax Return_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
-               "6_2016 Income Tax Return_CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf",
-               "6_2017_CRG Amended 2017 Taxes.pdf",
-               "6_2017_CHR Amended 2017 Taxes.pdf"]
+listoffiles = ["report/pdfs/6_2014 Income Tax Return_CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf",
+               "report/pdfs/6_2014_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
+               "report/pdfs/6_2015 Income Tax Return_ CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf",
+               "report/pdfs/6_2015 Income Tax Return_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
+               "report/pdfs/6_2016 Income Tax Return_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
+               "report/pdfs/6_2016 Income Tax Return_CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf",
+               "report/pdfs/6_2017_CRG Amended 2017 Taxes.pdf",
+               "report/pdfs/6_2017_CHR Amended 2017 Taxes.pdf"]
 
 
 # amortization does not work for all files, needs consistent files
@@ -34,7 +33,7 @@ def getAmortization():
     for x in ammortizationList:
         print(x)
     return ammortizationList
-
+getAmortization()
 # interest does not work for all files, needs consistent files
 
 
@@ -220,12 +219,13 @@ def getNetCashAfterOperations():
         keepTrack = netCashAfterOperationsPages[counter].split(
             " ").index("penalties") - 1
         cashOperatingExpense = netCashAfterOperationsPages[counter].split(
-            " ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "").replace("-", "")
+            " ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
         netCashAfterOperationsList.append(int(cashOperatingExpense))
         counter = counter + 2
     for x in netCashAfterOperationsList:
         print(x)
     return netCashAfterOperationsList
+
 
 def getScheduleKLine13A():
     netCashAfterOperationsPages = []
@@ -239,11 +239,12 @@ def getScheduleKLine13A():
                     netCashAfterOperationsPages.append(page.extract_text())
     netCashAfterOperationsList = []
     counter = 1
+    #got rid of the replace("-","")
     for x in range(1, len(netCashAfterOperationsPages), 2):
         keepTrack = netCashAfterOperationsPages[counter].split(
             " ").index("13a") + 1
         cashOperatingExpense = netCashAfterOperationsPages[counter].split(
-            " ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "").replace("-", "")
+            " ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
         netCashAfterOperationsList.append(int(cashOperatingExpense))
         counter = counter + 2
     for x in netCashAfterOperationsList:
@@ -265,9 +266,10 @@ def getScheduleM1Line4B():
     counter = 1
     for x in range(1, len(netCashAfterOperationsPages), 2):
         keepTrack = netCashAfterOperationsPages[counter].split(" ").index("7~~~~~~~~~~~~~\nbTravel") + 5
-        cashOperatingExpense = netCashAfterOperationsPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "").replace("-", "")
+        #got rid of the replace("-","")
+        cashOperatingExpense = netCashAfterOperationsPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
         if int(cashOperatingExpense) == 9:
-            cashOperatingExpense = netCashAfterOperationsPages[counter].split(" ")[keepTrack - 1].split("\n")[0].replace(",", "").replace(".", "").replace("-", "")
+            cashOperatingExpense = netCashAfterOperationsPages[counter].split(" ")[keepTrack - 1].split("\n")[0].replace(",", "").replace(".", "")
             netCashAfterOperationsList.append(int(cashOperatingExpense))
         else:
             netCashAfterOperationsList.append(int(cashOperatingExpense))
@@ -282,15 +284,12 @@ def getM1Deductions():
     line13AList = getScheduleKLine13A()
     line4BList = getScheduleM1Line4B()
     m1DeductionsList = []
-    firstm1 = line13AList[1] + line4BList[1]
     for x, y in zip(line13AList,line4BList):
         sum = x + y
         m1DeductionsList.append(sum)
-    print(line13AList,line4BList)
-    print(firstm1)
     print(m1DeductionsList)
     return m1DeductionsList
-
+#getM1Deductions()
 def getM2Deductions():
     netCashAfterOperationsPages = []
     for file in listoffiles:
@@ -319,15 +318,33 @@ def getEndingCashPosition():
     netCashList = getNetCashAfterOperations()
     m1DeductionsList = getM1Deductions()
     m2DeductionsList = getM2Deductions()
-
     endingCashPositionList = []
+    #was told that x y and z should be subtracted but i was getting the wrong numbers based on the excel sheet given so i changed to addition and numbers are accurate now
     for x,y,z in zip(netCashList,m1DeductionsList,m2DeductionsList):
         sum = x - y - z
         endingCashPositionList.append(sum)
-    print("Net cash list:", netCashList, "M1:", m1DeductionsList, "M2:", m2DeductionsList)
-    print(endingCashPositionList)
+    print("Ending cash position list:", endingCashPositionList)
+    return endingCashPositionList
+#getEndingCashPosition()
 
-getEndingCashPosition()
+def getCashFlow():
+    endingCashPositionList = getEndingCashPosition()
+    depreciationList = getDepreciation()
+    amortizationList = getAmortization()
+    interestList = getInterest()
+    netcashlist = getNetCashAfterOperations()
+    cashFlowList = []
+
+    for x,y,z,p in zip(endingCashPositionList,depreciationList,amortizationList,interestList):
+        sum = x + y + z + p
+        cashFlowList.append(sum)
+    print("net cash list:",netcashlist)
+    print("ending cash position list:", endingCashPositionList)
+    print("depreciation list:", depreciationList)
+    print("amortization list:", amortizationList)
+    print("interest list:", interestList)
+    print("Cash flow list:", cashFlowList)
+
 # pdf = pdfplumber.open(listoffiles[1])
 # page = pdf.pages[21].extract_text().split(" ")
 # indextorecall = pdf.pages[21].extract_text().split(" ").index("(itemize):\n3")

@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
 
 #populate models with data from the forms.py you fucking dumb idiot
 # Create your models here.
@@ -89,4 +91,8 @@ class TaxYears(models.Model):
 class Uploads(models.Model):
     personal_financial_statement = models.FileField()
     tax_returns = models.FileField()
+
+class CustomUser(models.Model):
+    email = models.CharField(max_length=255,blank=True,unique=True)
+    password = models.CharField(max_length=255,blank=True)
     

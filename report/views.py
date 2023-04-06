@@ -1,8 +1,8 @@
-import re
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .forms import BasicInformationForm, OperatingYearsForm1, OperatingYearsForm2, OperatingYearsForm3, TaxYearsForm, YearThree
-from django.forms import ModelForm
+from .forms import BasicInformationForm, OperatingYearsForm1, OperatingYearsForm2, OperatingYearsForm3, TaxYearsForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate,login, logout
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -14,8 +14,10 @@ from django.forms import ModelForm
 #that maid knows how to do specific things that i have already taught them
 
 #comes from forms.py 
+@login_required
 def firstPage(request):
     form = BasicInformationForm()
+    user_id = request.user.id
 
     if request.method == "POST":
         form = BasicInformationForm(request.POST)
@@ -35,6 +37,7 @@ def firstPage(request):
     
     return render(request, "firstPage.html", {"form":form})
 
+@login_required
 def yearOne(request):
     form = OperatingYearsForm1()
     if request.method == "POST":
@@ -56,6 +59,7 @@ def yearOne(request):
 
     return render(request, 'secondPage.html', {"form" : form})
 
+@login_required
 def yearTwo(request):
     form = OperatingYearsForm2()
 
@@ -77,6 +81,7 @@ def yearTwo(request):
 
     return render(request, 'thirdPage.html', {"form" : form})
 
+@login_required
 def yearThree(request):
     form = OperatingYearsForm3()
 
@@ -98,6 +103,7 @@ def yearThree(request):
 
     return render(request, 'fourthPage.html', {"form" : form})
 
+@login_required
 def taxYears(request):
 
     form = TaxYearsForm()
@@ -120,8 +126,38 @@ def taxYears(request):
 
     return render(request, 'fourthPage.html', {"form" : form})
 
-
-
+@login_required
 def success(request):
     return render(request,'success.html')
 
+def loginUser(request):
+    if request.method == 'POST':
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        print(username,password)
+        user = authenticate(request, username=username, password=password)
+        userID = user.id
+        if user is not None:
+            login(request,user)
+            return redirect("/",userID)
+            
+    # context = {'form':form}
+    return render(request, "login.html")
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            form.save()
+            return redirect("/")
+    
+    form = UserCreationForm()
+    context = {'form':form}
+    return render(request, "register.html", context)
+    
+def logoutUser(request):
+    logout(request)
+    return redirect("/login")
