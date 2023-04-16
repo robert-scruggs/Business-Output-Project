@@ -6,34 +6,76 @@ listoffiles = ["report/pdfs/6_2014 Income Tax Return_CUTTER RESTAURANT GROUP, LL
                "report/pdfs/6_2015 Income Tax Return_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
                "report/pdfs/6_2016 Income Tax Return_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
                "report/pdfs/6_2016 Income Tax Return_CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf",
-               "report/pdfs/6_2017_CRG Amended 2017 Taxes.pdf",
-               "report/pdfs/6_2017_CHR Amended 2017 Taxes.pdf"]
+               "report/pdfs/6_2018 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf"
+            #    "report/pdfs/6_2017_CRG Amended 2017 Taxes.pdf",
+            #    "report/pdfs/6_2017_CHR Amended 2017 Taxes.pdf"
+               ]
 
+secondListoffiles = ["report/pdfs/6_2018 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf", "report/pdfs/6_2019 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf", "report/pdfs/6_2020 ITR 1065_OVERHOLT INVESTMENTS_ LLC_2020_1065_Tax Returns.pdf"]
 
+# pdf = pdfplumber.open(secondListoffiles[0])
+# text = pdf.pages[6].extract_text()
+# print(text)
+# print("------------------------------------")
+
+# pdf = pdfplumber.open(secondListoffiles[1])
+# text = pdf.pages[8].extract_text()
+# print(text)
+# print("------------------------------------")
+
+# pdf = pdfplumber.open(secondListoffiles[2])
+# text = pdf.pages[4].extract_text()
+# print(text)
+# print("------------------------------------")
+
+# randomFile = 'report/pdfs/report/pdfs/5_2020 ITR_Josh & Laura Overholt.pdf'
 # amortization does not work for all files, needs consistent files
-def getAmortization():
+# def getAmortization(fileList):
+#     myList = []
+#     for file in fileList:
+#         pdf = pdfplumber.open(file)
+#         for page in pdf.pages:
+#             currList = page.extract_text().split(" ")
+#             for item in currList:
+#                 if "Amortization(a)\n(b)" and "Amortizable" in item:
+#                     print("found")
+#                     print(page.extract_text(), page.page_number)
+#                     myList.append(page.extract_text())
+#     ammortizationList = []
+#     counter = 1
+#     for x in range(1, len(myList), 2):
+#         keepTrack = myList[counter].split(" ").index("44") + 1
+#         amortization = myList[counter].split(" ")[keepTrack].split("\n")[
+#             0].replace(",", "").replace(".", "")
+#         ammortizationList.append(int(amortization))
+#         counter = counter + 2
+
+#     for x in ammortizationList:
+#         print(x)
+#     return ammortizationList
+
+def getAmortization(fileList):
     myList = []
-    for file in listoffiles:
+    for file in fileList:
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
-            currList = page.extract_text().split(" ")
-            for item in currList:
-                if "Amortization(a)\n(b)" and "Amortizable" in item:
-                    print("found")
-                    myList.append(page.extract_text())
+            currList = page.extract_text()
+            if "44 Total. Add amounts in column (f). See the instructions for where to report" and "\nPart VI Amortization(a)\n(b) (c) (d) (e) (f)\n" in currList:
+                print("found", page.page_number)
+                myList.append(page.extract_text())
+                break    
     ammortizationList = []
-    counter = 1
-    for x in range(1, len(myList), 2):
+    counter = 0
+    for x in range(0, len(myList)):
         keepTrack = myList[counter].split(" ").index("44") + 1
-        amortization = myList[counter].split(" ")[keepTrack].split("\n")[
-            0].replace(",", "").replace(".", "")
+        amortization = myList[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
         ammortizationList.append(int(amortization))
-        counter = counter + 2
+        counter = counter + 1
 
     for x in ammortizationList:
         print(x)
     return ammortizationList
-getAmortization()
+
 # interest does not work for all files, needs consistent files
 
 
@@ -60,31 +102,63 @@ def getInterest():
         print(x)
     return interestList
 
-
+# pdf = pdfplumber.open(listoffiles[8])
+# something = pdf.pages[4]
+# text = something.extract_text().split(" ")
+# print(text)
+# if "1065" and "U.S." and "Return" and "of" and "Partnership" and "Income" in text:
+#     print("found")
+# print(text.index("16a") + 1)
+# print(text[362].split(" ")[0].split(".")[0].replace(",",""))
+                    
 # depreciation does not work for all files, needs consistent files
-def getDepreciation():
+# def getDepreciation(fileList):
+#     depreciationPages = []
+#     for file in fileList:
+#         pdf = pdfplumber.open(file)
+#         for page in pdf.pages:
+#             currList = page.extract_text().split(" ")
+#             for item in currList:
+#                 if "1065" and "U.S." and "Return" and "of" and "Partnership" and ("Income\nOMB" or "Income" and "OMB") in item:
+#                     print("found", page.extract_text())
+#                     depreciationPages.append(page.extract_text())
+#                     break
+#     depreciationList = []
+#     counter = 1
+#     for x in range(1, len(depreciationPages), 2):
+#         keepTrack = depreciationPages[counter].split(" ").index("16a") + 1
+#         depreciation = depreciationPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
+#         depreciationList.append(int(depreciation))
+#         counter = counter + 2
+
+#     for x in depreciationList:
+#         print(x)
+#     return depreciationList
+
+def getDepreciation(fileList):
     depreciationPages = []
-    for file in listoffiles:
+    for file in fileList:
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
-            currList = page.extract_text().split(" ")
-            for item in currList:
-                if "1065" and "U.S." and "Return" and "of" and "Partnership" and "Income\nOMB" in item:
-                    print("found")
-                    depreciationPages.append(page.extract_text())
+            currList = page.extract_text()
+            if "16 aDepreciation (if required, attach Form 4562)" in currList or "16a Depreciation (if required, attach Form 4562" in currList:
+                print("found", page.page_number)
+                depreciationPages.append(page.extract_text())
+                break
+                
     depreciationList = []
-    counter = 1
-    for x in range(1, len(depreciationPages), 2):
+    counter = 0
+    for x in range(0, len(depreciationPages)):
         keepTrack = depreciationPages[counter].split(" ").index("16a") + 1
-        depreciation = depreciationPages[counter].split(" ")[keepTrack].split("\n")[
-            0].replace(",", "").replace(".", "")
-        depreciationList.append(int(depreciation))
-        counter = counter + 2
-
+        depreciation = int(depreciationPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", ""))
+        
+        depreciationList.append(depreciation)     
+        counter = counter + 1
+    print(depreciationList)
     for x in depreciationList:
         print(x)
     return depreciationList
-
+getDepreciation(secondListoffiles)
 # cashflow not done yet, will come back to finish
 
 

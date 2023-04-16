@@ -8,15 +8,19 @@ from .models import BasicInformation, TaxYears, OperatingYears
 #this is what your maids will use to decorate the rooms
 
 class BasicInformationForm(ModelForm):
-    finance_review = forms.CharField(max_length=255, label="What is the name of the proposed project for financing review?")
+    finance_review = forms.CharField(max_length=255, label="Proposed project for financing review:")
     operating_company = forms.CharField(max_length=255, label="Operating Company")
     parent_company = forms.CharField(max_length=255, label="Parent Company")
     business_owners = forms.CharField(max_length=255, label="Business Owners", help_text="(Separate business owners with commas)")
     primary_business_address = forms.CharField(max_length=255, label="Primary Business Address")
-    list_of_report_outcomes = forms.CharField(max_length=255, label="List of Report Outcomes")
+    proposed_loan_needs = forms.CharField(max_length=255, label="Proposed Loan Needs:")
+    list_of_report_outcomes = forms.CharField(max_length=2000, label="List Of Report Outcomes", help_text="(Separate items with commas)", widget=forms.Textarea(attrs={
+        'style': 'vertical-align: top',
+        "rows":5, "cols":20
+    }))
     class Meta:
         model = BasicInformation
-        fields = ['finance_review','operating_company', 'parent_company', 'business_owners', 'primary_business_address','list_of_report_outcomes']
+        fields = ('finance_review','operating_company', 'parent_company', 'business_owners', 'primary_business_address','proposed_loan_needs','list_of_report_outcomes')
         
 
 class OperatingYearsForm1(ModelForm):
@@ -35,7 +39,6 @@ class OperatingYearsForm1(ModelForm):
         fields = ['state','num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing','property_tax','insurance','reserve']
 
 class OperatingYearsForm2(ModelForm):
-    state = forms.CharField(max_length=200, label="Which state does your company operate out of?")
     num_of_locations = forms.CharField(max_length=200, label="Please type number of locations for year 2")
     food_cost = forms.CharField(max_length=200, label="Enter total food cost for year 2")
     labor_cost = forms.CharField(max_length=200, label="Enter total labor cost for year 2")
@@ -47,10 +50,9 @@ class OperatingYearsForm2(ModelForm):
     reserve = forms.CharField(max_length=200, label="Enter total reserve cost for year 2")    
     class Meta:
         model = OperatingYears
-        fields = ['state','num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing','property_tax','insurance','reserve']
+        fields = ['num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing','property_tax','insurance','reserve']
 
 class OperatingYearsForm3(ModelForm):
-    state = forms.CharField(max_length=200, label="Which state does your company operate out of?")
     num_of_locations = forms.CharField(max_length=200, label="Please type number of locations for year 3")
     food_cost = forms.CharField(max_length=200, label="Enter total food cost for year 3")
     labor_cost = forms.CharField(max_length=200, label="Enter total labor cost for year 3")
@@ -62,7 +64,7 @@ class OperatingYearsForm3(ModelForm):
     reserve = forms.CharField(max_length=200, label="Enter total reserve cost for year 3")    
     class Meta:
         model = OperatingYears
-        fields = ['state','num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing','property_tax','insurance','reserve']
+        fields = ['num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing','property_tax','insurance','reserve']
         
 
 class TaxYearsForm(ModelForm):

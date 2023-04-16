@@ -15,25 +15,18 @@ from django.contrib.auth.decorators import login_required
 
 #comes from forms.py 
 @login_required
-def firstPage(request):
+def basicInformation(request):
     form = BasicInformationForm()
-    user_id = request.user.id
-
+    
     if request.method == "POST":
         form = BasicInformationForm(request.POST)
-
         if form.is_valid():
-            f = form.cleaned_data["finance_review"]
-            oc = form.cleaned_data['operating_company']
-            pc = form.cleaned_data['parent_company']
-            bo = form.cleaned_data['business_owners']
-            pba = form.cleaned_data['primary_business_address']
-            lro = form.cleaned_data['list_of_report_outcomes']
+            #this will be the signed in users id
+            my_object = form.save(commit=False)
+            my_object.user = request.user
+            my_object.save()
             form.save()
-            print(f,oc,pc,bo,pba,lro)
-            
         return redirect("/yearOne/")
-    
     
     return render(request, "firstPage.html", {"form":form})
 
@@ -43,17 +36,11 @@ def yearOne(request):
     if request.method == "POST":
         form = OperatingYearsForm1(request.POST)
         if form.is_valid():
-            a = form.cleaned_data["state"]
-            nol = form.cleaned_data['num_of_locations']
-            fc = form.cleaned_data['food_cost']
-            lc = form.cleaned_data['labor_cost']
-            ag = form.cleaned_data['admin_and_general']
-            rs = form.cleaned_data['rands_marketing']
-            pt = form.cleaned_data['property_tax']
-            insurance = form.cleaned_data['insurance']
-            reserve = form.cleaned_data['reserve']
+            my_object = form.save(commit=False)
+            my_object.user = request.user
+            my_object.save()
+            form.user = request.user.id
             form.save()
-            print(a,nol,fc,lc,ag,rs,pt,insurance,reserve)
         return redirect("/yearTwo/")
     
 
@@ -66,17 +53,11 @@ def yearTwo(request):
     if request.method == "POST":
         form = OperatingYearsForm2(request.POST)
         if form.is_valid():
-            a = form.cleaned_data["state"]
-            nol = form.cleaned_data['num_of_locations']
-            fc = form.cleaned_data['food_cost']
-            lc = form.cleaned_data['labor_cost']
-            ag = form.cleaned_data['admin_and_general']
-            rs = form.cleaned_data['rands_marketing']
-            pt = form.cleaned_data['property_tax']
-            insurance = form.cleaned_data['insurance']
-            reserve = form.cleaned_data['reserve']
+            my_object = form.save(commit=False)
+            my_object.user = request.user
+            my_object.save()
+            form.user = request.user.id
             form.save()
-            print(a,nol,fc,lc,ag,rs,pt,insurance,reserve)
         return redirect("/yearThree/")
 
     return render(request, 'thirdPage.html', {"form" : form})
@@ -85,43 +66,32 @@ def yearTwo(request):
 def yearThree(request):
     form = OperatingYearsForm3()
 
+    
     if request.method == "POST":
         form = OperatingYearsForm3(request.POST)
         if form.is_valid():
-            a = form.cleaned_data["state"]
-            nol = form.cleaned_data['num_of_locations']
-            fc = form.cleaned_data['food_cost']
-            lc = form.cleaned_data['labor_cost']
-            ag = form.cleaned_data['admin_and_general']
-            rs = form.cleaned_data['rands_marketing']
-            pt = form.cleaned_data['property_tax']
-            insurance = form.cleaned_data['insurance']
-            reserve = form.cleaned_data['reserve']
+            my_object = form.save(commit=False)
+            my_object.user = request.user
+            my_object.save()
+            form.user = request.user.id
             form.save()
-            print(a,nol,fc,lc,ag,rs,pt,insurance,reserve)
-        return redirect("/success/")
+        return redirect("/files/")
 
     return render(request, 'fourthPage.html', {"form" : form})
 
 @login_required
 def taxYears(request):
-
     form = TaxYearsForm()
 
+    
     if request.method == "POST":
         form = TaxYearsForm(request.POST)
         if form.is_valid():
-            a = form.cleaned_data["state"]
-            nol = form.cleaned_data['num_of_locations']
-            fc = form.cleaned_data['food_cost']
-            lc = form.cleaned_data['labor_cost']
-            ag = form.cleaned_data['admin_and_general']
-            rs = form.cleaned_data['rands_marketing']
-            pt = form.cleaned_data['property_tax']
-            insurance = form.cleaned_data['insurance']
-            reserve = form.cleaned_data['reserve']
+            my_object = form.save(commit=False)
+            my_object.user = request.user
+            my_object.save()
+            form.user = request.user.id
             form.save()
-            print(a,nol,fc,lc,ag,rs,pt,insurance,reserve)
         return redirect("/success/")
 
     return render(request, 'fourthPage.html', {"form" : form})
@@ -134,12 +104,12 @@ def loginUser(request):
     if request.method == 'POST':
         username = request.POST.get("username")
         password = request.POST.get("password")
-        print(username,password)
         user = authenticate(request, username=username, password=password)
-        userID = user.id
         if user is not None:
             login(request,user)
-            return redirect("/",userID)
+            return redirect("/basicInformation/")
+        else:
+            print("wrong information")
             
     # context = {'form':form}
     return render(request, "login.html")
@@ -149,10 +119,8 @@ def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
             form.save()
-            return redirect("/")
+            return redirect("/login")
     
     form = UserCreationForm()
     context = {'form':form}
@@ -161,3 +129,14 @@ def register(request):
 def logoutUser(request):
     logout(request)
     return redirect("/login")
+
+filesList = []
+def files(request):
+    if request.method == 'POST':
+        uploaded_file = request.FILES['file']
+        filesList.append(uploaded_file)
+        print(filesList)
+        
+        #return render(request, 'success.html')
+    return render(request, 'files.html')
+

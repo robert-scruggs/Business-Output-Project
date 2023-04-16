@@ -14,14 +14,17 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.firstPage),
+    path('', views.register),
+    path('basicInformation/', views.basicInformation),
     path('yearOne/', views.yearOne),
     path('yearTwo/', views.yearTwo),
     path('yearThree/', views.yearThree),
-    path('taxyears/', views.yearThree),
+    path('taxyears/', views.taxYears),
     path('success/', views.success),
     path('register/', views.register, name='register'),
     path('login/', views.loginUser, name='login'),
     path('logout/', views.logoutUser, name='logout'),
+    path('files/', views.files)
 ]
+
 

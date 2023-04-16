@@ -1,20 +1,22 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 
 #populate models with data from the forms.py you fucking dumb idiot
 # Create your models here.
 
 class BasicInformation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     finance_review = models.CharField(max_length=200)
     operating_company = models.CharField(max_length=200)
     parent_company = models.CharField( max_length=200)
     business_owners = models.CharField(max_length=200)
     primary_business_address = models.CharField(max_length=200)
-    list_of_report_outcomes = models.CharField(max_length=200)
+    proposed_loan_needs = models.CharField(max_length=200)
+    list_of_report_outcomes = models.TextField(max_length=40000)
  
 class OperatingYears(models.Model):
-    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     state = models.CharField(max_length=200)
     num_of_locations = models.CharField(max_length=200)
     total_sales = models.CharField(max_length=200)
@@ -35,6 +37,7 @@ class OperatingYears(models.Model):
 
 
 class PersonalFinancialStatement(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     cash = models.CharField(max_length=200)
     marketable_securities = models.CharField(max_length=200)
     total_liquid_assets = models.CharField(max_length=200)
@@ -58,6 +61,7 @@ class PersonalFinancialStatement(models.Model):
     grand_total = models.CharField(max_length=200)
 
 class FinancialFlashReport(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     company_name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     owner_name = models.CharField(max_length=200)
@@ -65,6 +69,7 @@ class FinancialFlashReport(models.Model):
     current_business_structure = models.CharField(max_length=200)
     
 class TaxYears(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     date_of_statement = models.CharField(max_length=200)
     marketable_securities = models.CharField(max_length=200)
     cash_from_sales = models.CharField(max_length=200)
@@ -89,10 +94,7 @@ class TaxYears(models.Model):
     financial_footnotes = models.CharField(max_length=200)
 
 class Uploads(models.Model):
-    personal_financial_statement = models.FileField()
-    tax_returns = models.FileField()
+    name = models.CharField(max_length=255)
+    data = models.BinaryField()
 
-class CustomUser(models.Model):
-    email = models.CharField(max_length=255,blank=True,unique=True)
-    password = models.CharField(max_length=255,blank=True)
     
