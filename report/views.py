@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.decorators import login_required
 
 
+
 # Create your views here.
 #basically methods that link up to the forms.py module and return instances of the html created
 #in forms
@@ -140,3 +141,24 @@ def files(request):
         #return render(request, 'success.html')
     return render(request, 'files.html')
 
+
+
+def report(request):
+    context = {'title': 'Business Financing Review',
+               'project' : 'Corner Bakery Cafe Franchise Locations (3)',
+               'operating_company': 'Cutter Highlands Ranch LLC',
+               'parent_company': 'Something IDK',
+               'business_owners': 'Gerald and Whitney',
+               'primary_business_address': 'ya mama lane',
+               'locations': 'some locations around the world',
+               'business_financing_needs_summary': '$50000000',
+               'proposed_loan_needs': '$63435415413',
+               'package_includes': 'something about what is inside the package',
+               'year_one_locations': '1',
+               'year_two_locations': '2',
+               'year_three_locations': '3',
+               'state': 'Colorado'}
+    
+    
+    
+    return render(request, 'report.html', context)

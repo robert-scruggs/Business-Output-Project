@@ -6,17 +6,42 @@ listoffiles = ["report/pdfs/6_2014 Income Tax Return_CUTTER RESTAURANT GROUP, LL
                "report/pdfs/6_2015 Income Tax Return_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
                "report/pdfs/6_2016 Income Tax Return_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
                "report/pdfs/6_2016 Income Tax Return_CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf",
-               "report/pdfs/6_2018 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf"
-            #    "report/pdfs/6_2017_CRG Amended 2017 Taxes.pdf",
-            #    "report/pdfs/6_2017_CHR Amended 2017 Taxes.pdf"
+               "report/pdfs/6_2018 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf",
+                "report/pdfs/6_2019 ITR 1120S_Hannon Foods of Tallulah.pdf",
+                "report/pdfs/6_2017_CRG Amended 2017 Taxes.pdf",
+                "report/pdfs/6_2017_CHR Amended 2017 Taxes.pdf",
+                "report/pdfs/6_2018 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf",
+                "report/pdfs/6_2019 1120S_Hannon Foods of Vicksburg.pdf",
+                "report/pdfs/6_2019 ITR 1120S_Hannon Foods of Tallulah.pdf",
+                "report/pdfs/6_2019 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf",
+                "report/pdfs/6_2020 ITR 1065_OVERHOLT INVESTMENTS_ LLC_2020_1065_Tax Returns.pdf",
+                "report/pdfs/6_2020 ITR 1120S Hannon Foods of Tallulah.pdf",
+                "report/pdfs/6_2020 ITR 1120S Hannon Foods of Vicksburg.pdf",
+                "report/pdfs/6_2020 ITR_Delish Brands LLC .pdf",
+                "report/pdfs/2015 Income Tax Return_Patel_JEWELL SOUTH 2015.pdf"
                ]
 
-secondListoffiles = ["report/pdfs/6_2018 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf", "report/pdfs/6_2019 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf", "report/pdfs/6_2020 ITR 1065_OVERHOLT INVESTMENTS_ LLC_2020_1065_Tax Returns.pdf"]
+secondListoffiles = ["report/pdfs/6_2018 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf",
+                    "report/pdfs/6_2019 1120S_Hannon Foods of Vicksburg.pdf",
+                    "report/pdfs/6_2019 ITR 1120S_Hannon Foods of Tallulah.pdf",
+                    "report/pdfs/6_2019 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE SEND.pdf",
+                    "report/pdfs/6_2020 ITR 1065_OVERHOLT INVESTMENTS_ LLC_2020_1065_Tax Returns.pdf",
+                    "report/pdfs/6_2020 ITR 1120S Hannon Foods of Tallulah.pdf",
+                    "report/pdfs/6_2020 ITR 1120S Hannon Foods of Vicksburg.pdf",
+                    "report/pdfs/6_2020 ITR_Delish Brands LLC .pdf",
+                    "report/pdfs/2015 Income Tax Return_Patel_JEWELL SOUTH 2015.pdf"
+                    ]
 
-# pdf = pdfplumber.open(secondListoffiles[0])
-# text = pdf.pages[6].extract_text()
-# print(text)
-# print("------------------------------------")
+filesthatdontwork = [
+                    #"report/pdfs/6_2019 ITR 1065_Delish Real Estate Holdings LLC.pdf",
+                    #"report/pdfs/6_2019 ITR_1065 Delish Brands, LLC.pdf",
+                    #"report/pdfs/6_2020 ITR_Delish Real Estate  Holdings, LLC.pdf",
+    ]
+pdf = pdfplumber.open(secondListoffiles[0])
+text = pdf.pages[6].extract_text()
+if "cBalance. Subtract line 1b from line 1a" in text:
+    print("found")
+
 
 # pdf = pdfplumber.open(secondListoffiles[1])
 # text = pdf.pages[8].extract_text()
@@ -102,66 +127,45 @@ def getInterest():
         print(x)
     return interestList
 
-# pdf = pdfplumber.open(listoffiles[8])
-# something = pdf.pages[4]
-# text = something.extract_text().split(" ")
-# print(text)
-# if "1065" and "U.S." and "Return" and "of" and "Partnership" and "Income" in text:
-#     print("found")
-# print(text.index("16a") + 1)
-# print(text[362].split(" ")[0].split(".")[0].replace(",",""))
-                    
-# depreciation does not work for all files, needs consistent files
-# def getDepreciation(fileList):
-#     depreciationPages = []
-#     for file in fileList:
-#         pdf = pdfplumber.open(file)
-#         for page in pdf.pages:
-#             currList = page.extract_text().split(" ")
-#             for item in currList:
-#                 if "1065" and "U.S." and "Return" and "of" and "Partnership" and ("Income\nOMB" or "Income" and "OMB") in item:
-#                     print("found", page.extract_text())
-#                     depreciationPages.append(page.extract_text())
-#                     break
-#     depreciationList = []
-#     counter = 1
-#     for x in range(1, len(depreciationPages), 2):
-#         keepTrack = depreciationPages[counter].split(" ").index("16a") + 1
-#         depreciation = depreciationPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
-#         depreciationList.append(int(depreciation))
-#         counter = counter + 2
-
-#     for x in depreciationList:
-#         print(x)
-#     return depreciationList
 
 def getDepreciation(fileList):
     depreciationPages = []
+    depreciationNumList = []
+    counter = 0
+
+    def depreciationMethod(num):
+        keepTrack = depreciationPages[counter].split(" ").index(num) + 1
+        depreciation = int(depreciationPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", ""))
+        depreciationNumList.append(depreciation)
+         
+
     for file in fileList:
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text()
-            if "16 aDepreciation (if required, attach Form 4562)" in currList or "16a Depreciation (if required, attach Form 4562" in currList:
-                print("found", page.page_number)
+            # 1065
+            if "16 aDepreciation (if required, attach Form 4562)" in currList or "16a Depreciation (if required, attach Form 4562)" in currList:
+                print("found", page.page_number, file)
                 depreciationPages.append(page.extract_text())
+                depreciationMethod("16a")
+                counter = counter + 1
+                break
+            # 1120
+            elif "14 Depreciation not claimed on Form 1125-A or elsewhere on return (attach Form 4562)" in currList:
+                print("found", page.page_number, file)
+                depreciationPages.append(page.extract_text())
+                depreciationMethod("14")
+                counter = counter + 1
                 break
                 
-    depreciationList = []
-    counter = 0
-    for x in range(0, len(depreciationPages)):
-        keepTrack = depreciationPages[counter].split(" ").index("16a") + 1
-        depreciation = int(depreciationPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", ""))
-        
-        depreciationList.append(depreciation)     
-        counter = counter + 1
-    print(depreciationList)
-    for x in depreciationList:
+    for x in depreciationNumList:
         print(x)
-    return depreciationList
-getDepreciation(secondListoffiles)
+    return depreciationNumList
+#getDepreciation(listoffiles)
+#getDepreciation(secondListoffiles)
+
+
 # cashflow not done yet, will come back to finish
-
-
 def getCashFlow():
     cashFlowList = []
     ammortizationList = getAmortization()
@@ -176,27 +180,35 @@ def getCashFlow():
 # cash from sales 1c.
 
 
-def getCashFromSales():
+def getCashFromSales(fileList):
     cashFromSalesPages = []
-    for file in listoffiles:
+    cashFromSalesList = []
+    counter = 0
+
+    for file in fileList:
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
-            currList = page.extract_text().split(" ")
-            for item in currList:
-                if "1065" and "U.S." and "Return" and "of" and "Partnership" and "Income\nOMB" in item:
-                    print("found")
-                    cashFromSalesPages.append(page.extract_text())
-    cashFromSalesList = []
-    counter = 1
-    for x in range(1, len(cashFromSalesPages), 2):
+            currList = page.extract_text()
+            if "c Balance. Subtract line 1b from line 1a " in currList:
+                print("found", file)
+                cashFromSalesPages.append(page.extract_text())
+                break
+            elif "cBalance. Subtract line 1b from line 1a" in currList:
+                print("found", file)
+            else:
+                print("not found", file)
+                break
+    
+    for x in range(0, len(cashFromSalesPages)):
         keepTrack = cashFromSalesPages[counter].split(" ").index("1c") + 1
-        cashfromSales = cashFromSalesPages[counter].split(" ")[keepTrack].split("\n")[
-            0].replace(",", "").replace(".", "")
+        cashfromSales = cashFromSalesPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
         cashFromSalesList.append(int(cashfromSales))
-        counter = counter + 2
+        counter = counter + 1
+    
     for x in cashFromSalesList:
         print(x)
     return cashFromSalesList
+getCashFromSales(secondListoffiles)
 # gross cash income
 
 
