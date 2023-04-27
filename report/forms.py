@@ -36,7 +36,7 @@ class OperatingYearsForm1(ModelForm):
     reserve = forms.CharField(max_length=200, label="Enter total reserve cost for year 1")    
     class Meta:
         model = OperatingYears
-        fields = ['state','num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing','property_tax','insurance','reserve']
+        fields = ['state','num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing', 'facilities', 'property_tax','insurance','reserve']
 
 class OperatingYearsForm2(ModelForm):
     num_of_locations = forms.CharField(max_length=200, label="Please type number of locations for year 2")
@@ -50,7 +50,7 @@ class OperatingYearsForm2(ModelForm):
     reserve = forms.CharField(max_length=200, label="Enter total reserve cost for year 2")    
     class Meta:
         model = OperatingYears
-        fields = ['num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing','property_tax','insurance','reserve']
+        fields = ['num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing', 'facilities', 'property_tax','insurance','reserve']
 
 class OperatingYearsForm3(ModelForm):
     num_of_locations = forms.CharField(max_length=200, label="Please type number of locations for year 3")
@@ -64,7 +64,7 @@ class OperatingYearsForm3(ModelForm):
     reserve = forms.CharField(max_length=200, label="Enter total reserve cost for year 3")    
     class Meta:
         model = OperatingYears
-        fields = ['num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing','property_tax','insurance','reserve']
+        fields = ['num_of_locations', 'total_sales', 'food_cost', 'labor_cost','admin_and_general','rands_marketing', 'facilities', 'property_tax','insurance','reserve']
         
 
 class TaxYearsForm(ModelForm):

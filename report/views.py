@@ -3,7 +3,7 @@ from .forms import BasicInformationForm, OperatingYearsForm1, OperatingYearsForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.decorators import login_required
-
+from .models import * 
 
 
 # Create your views here.
@@ -36,12 +36,34 @@ def yearOne(request):
     form = OperatingYearsForm1()
     if request.method == "POST":
         form = OperatingYearsForm1(request.POST)
+        
         if form.is_valid():
             my_object = form.save(commit=False)
             my_object.user = request.user
             my_object.save()
-            form.user = request.user.id
             form.save()
+            form.user = request.user.id
+            #extra values that need to be saved
+            total_cost_of_goods_sold_value = int(form.cleaned_data['food_cost']) + int(form.cleaned_data['labor_cost'])
+            total_other_operative_expense_value = int(form.cleaned_data['admin_and_general']) + int(form.cleaned_data['rands_marketing']) + int(form.cleaned_data['facilities'])
+            total_operative_expense_value = total_cost_of_goods_sold_value + total_other_operative_expense_value
+            income_before_fix_expense_value = int(form.cleaned_data['total_sales']) - total_operative_expense_value
+            total_fix_expense_value = int(form.cleaned_data['property_tax']) + int(form.cleaned_data['insurance']) + int(form.cleaned_data['reserve'])
+            net_income_value = income_before_fix_expense_value - total_fix_expense_value
+            #this is getting the first row of operating years for the specific user
+            tcogsDB = OperatingYears.objects.filter(user_id = form.user).all()[0]
+            tcogsDB.total_cost_of_goods_sold = total_cost_of_goods_sold_value
+            tcogsDB.total_other_operative_expenses = total_other_operative_expense_value
+            tcogsDB.total_operative_expenses = total_operative_expense_value
+            tcogsDB.income_before_fix_expense = income_before_fix_expense_value
+            tcogsDB.total_fix_expenses = total_fix_expense_value
+            tcogsDB.net_income_before_interest_and_tax = net_income_value
+            #saves extra data to database
+            tcogsDB.save()
+            print(total_cost_of_goods_sold_value, total_other_operative_expense_value, total_operative_expense_value, income_before_fix_expense_value,total_fix_expense_value,net_income_value)
+            # idk = OperatingYears.objects.filter(user_id=form.user).all()[:3]
+            # for data in idk:
+            #     print(data.property_tax)
         return redirect("/yearTwo/")
     
 
@@ -59,6 +81,24 @@ def yearTwo(request):
             my_object.save()
             form.user = request.user.id
             form.save()
+            #
+            total_cost_of_goods_sold_value = int(form.cleaned_data['food_cost']) + int(form.cleaned_data['labor_cost'])
+            total_other_operative_expense_value = int(form.cleaned_data['admin_and_general']) + int(form.cleaned_data['rands_marketing']) + int(form.cleaned_data['facilities'])
+            total_operative_expense_value = total_cost_of_goods_sold_value + total_other_operative_expense_value
+            income_before_fix_expense_value = int(form.cleaned_data['total_sales']) - total_operative_expense_value
+            total_fix_expense_value = int(form.cleaned_data['property_tax']) + int(form.cleaned_data['insurance']) + int(form.cleaned_data['reserve'])
+            net_income_value = income_before_fix_expense_value - total_fix_expense_value
+            #this is getting the first row of operating years for the specific user
+            tcogsDB = OperatingYears.objects.filter(user_id = form.user).all()[1]
+            tcogsDB.total_cost_of_goods_sold = total_cost_of_goods_sold_value
+            tcogsDB.total_other_operative_expenses = total_other_operative_expense_value
+            tcogsDB.total_operative_expenses = total_operative_expense_value
+            tcogsDB.income_before_fix_expense = income_before_fix_expense_value
+            tcogsDB.total_fix_expenses = total_fix_expense_value
+            tcogsDB.net_income_before_interest_and_tax = net_income_value
+            #saves extra data to database
+            tcogsDB.save()
+            print(total_cost_of_goods_sold_value, total_other_operative_expense_value, total_operative_expense_value, income_before_fix_expense_value,total_fix_expense_value,net_income_value)
         return redirect("/yearThree/")
 
     return render(request, 'thirdPage.html', {"form" : form})
@@ -76,6 +116,23 @@ def yearThree(request):
             my_object.save()
             form.user = request.user.id
             form.save()
+            total_cost_of_goods_sold_value = int(form.cleaned_data['food_cost']) + int(form.cleaned_data['labor_cost'])
+            total_other_operative_expense_value = int(form.cleaned_data['admin_and_general']) + int(form.cleaned_data['rands_marketing']) + int(form.cleaned_data['facilities'])
+            total_operative_expense_value = total_cost_of_goods_sold_value + total_other_operative_expense_value
+            income_before_fix_expense_value = int(form.cleaned_data['total_sales']) - total_operative_expense_value
+            total_fix_expense_value = int(form.cleaned_data['property_tax']) + int(form.cleaned_data['insurance']) + int(form.cleaned_data['reserve'])
+            net_income_value = income_before_fix_expense_value - total_fix_expense_value
+            #this is getting the first row of operating years for the specific user
+            tcogsDB = OperatingYears.objects.filter(user_id = form.user).all()[2]
+            tcogsDB.total_cost_of_goods_sold = total_cost_of_goods_sold_value
+            tcogsDB.total_other_operative_expenses = total_other_operative_expense_value
+            tcogsDB.total_operative_expenses = total_operative_expense_value
+            tcogsDB.income_before_fix_expense = income_before_fix_expense_value
+            tcogsDB.total_fix_expenses = total_fix_expense_value
+            tcogsDB.net_income_before_interest_and_tax = net_income_value
+            #saves extra data to database
+            tcogsDB.save()
+            print(total_cost_of_goods_sold_value, total_other_operative_expense_value, total_operative_expense_value, income_before_fix_expense_value,total_fix_expense_value,net_income_value)
         return redirect("/files/")
 
     return render(request, 'fourthPage.html', {"form" : form})
@@ -144,6 +201,7 @@ def files(request):
 
 
 def report(request):
+
     context = {'title': 'Business Financing Review',
                'project' : 'Corner Bakery Cafe Franchise Locations (3)',
                'operating_company': 'Cutter Highlands Ranch LLC',
@@ -157,8 +215,101 @@ def report(request):
                'year_one_locations': '1',
                'year_two_locations': '2',
                'year_three_locations': '3',
-               'state': 'Colorado'}
+               'state': 'Colorado',
+                'year_one_sales': '2281',
+                'year_two_sales': '4813',
+                'year_three_sales': '5053',
+                'year_one_food_costs': '570',
+                'year_two_food_costs': '1203',
+                'year_three_food_costs': '1263',
+                'year_one_labor_costs': '593',
+                'year_two_labor_costs': '1251',
+                'year_three_labor_costs': '1314',
+                'year_one_total_costs': '1163',
+                'year_two_total_costs': '2455',
+                'year_three_total_costs': '2577',
+                'year_one_ag_costs': '80',
+                'year_two_ag_costs': '168',
+                'year_three_ag_costs': '177',
+                'year_one_rsm_costs': '114',
+                'year_two_rsm_costs': '241',
+                'year_three_rsm_costs': '253',
+                'year_one_facilities_costs': '342',
+                'year_two_facilities_costs': '722',
+                'year_three_facilities_costs': '758',
+                'year_one_total_other_operative_exp': '536',
+                'year_two_total_other_operative_exp': '1131',
+                'year_three_total_other_operative_exp': '1188',
+                'year_one_total_operative_exp': '1699',
+                'year_two_total_operative_exp': '3586',
+                'year_three_total_operative_exp': '3765',
+                'year_one_income_before_fix_expense': '582',
+                'year_two_income_before_fix_expense': '1227',
+                'year_three_income_before_fix_expense': '1289',
+                'year_one_property_tax': '16',
+                'year_two_property_tax': '26',
+                'year_three_property_tax': '27',
+                'year_one_insurance': '11',
+                'year_two_insurance': '24',
+                'year_three_insurance': '25',
+                'year_one_reserve': '342',
+                'year_two_reserve': '722',
+                'year_three_reserve': '810',
+                'year_one_net_income_before_interest_tax': '212',
+                'year_two_net_income_before_interest_tax': '455',
+                'year_three_net_income_before_interest_tax': '478',
+                'owner': 'John Cutter',
+                'cash': '25,000',
+                'marketable_securities': '2,100,000',
+                'total_liquid_assets': '2,125,000',
+                'real_estate': '0',
+                'primary_residence1': '900,000',
+                'total_real_estate': '900,000',
+                'other_assets': '0',
+                'ira_401k': '0',
+                'life_insurance': '0',
+                'notes_receivable': '0',
+                'business_values': '3,500,000',
+                'automobiles': '50,000',
+                'personal_property': '60,000',
+                'total_other_assets': '3,610,000',
+                'total_assets': '6,635,000',
+                'primary_residence2': '339,000',
+                'total_re_mortgage': '339,000',
+                'accounts_payable': '0',
+                'notes_payable': '0',
+                'installment_accounts': '94,000',
+                'total_liabilites': '433.000',
+                'net_worth': '6,202,000',
+                'overall_total': '6,635,000',
+
+                
+
+                }
     
     
     
     return render(request, 'report.html', context)
+
+def finalReport(request):
+    bi = BasicInformation.objects.all()
+    oy1 = OperatingYears.objects.all()[0]
+    oy2 = OperatingYears.objects.all()[1]
+    oy3 = OperatingYears.objects.all()[2]
+    ty = TaxYears.objects.all()
+    pfs = PersonalFinancialStatement.objects.all()
+    ffr = FinancialFlashReport.objects.all()
+    u = Uploads.objects.all()
+
+
+    context = {
+        'bi': bi,
+        'oy1': oy1,
+        'oy2': oy2,
+        'oy3': oy3,
+        'ty': ty,
+        'pfs': pfs,
+        'ffr': ffr
+    }
+    
+    return render(request, 'practiceReport.html', context)

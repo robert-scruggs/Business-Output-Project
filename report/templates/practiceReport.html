@@ -9,24 +9,30 @@
 <body>
 
     <div class="basic-information" style="border: 1px black solid;">
-        <h1 style="text-align: center; background-color: rgb(44, 44, 247);">{{ title }}</h1>
-        <p> Proposed Project for financing reivew: <strong>{{project}}</strong> </p>
-        <p> Operating Company: <strong>{{operating_company}}</strong></p>
-        <p> Parent Company: <strong>{{parent_company}}</strong></p>
-        <p> Business Owners: <strong>{{business_owners}}</strong></p>
-        <p> Primary Business Address: <strong>{{primary_business_address}}</strong></p>
-        <p> Locations: <strong>{{locations}}</strong></p>
-        <p style="background-color: lightsalmon;"> Business Financing Needs Summary: <strong>{{business_financing_needs_summary}}</strong></p>
-        <p style="background-color: plum;"> Proposed Loan Needs: <strong>{{proposed_loan_needs}}</strong></p>
-        <p style="background-color: lightblue;"> Package Includes: <strong>{{package_includes}}</strong></p>
+        {% for data in bi %}
+        <h1 style="text-align: center; background-color: rgb(44, 44, 247);">Business Financing Review</h1>
+        <p> Proposed Project for financing reivew: <strong>{{data.finance_review}}</strong> </p>
+        <p> Operating Company: <strong>{{data.operating_company}}</strong></p>
+        <p> Parent Company: <strong>{{data.parent_company}}</strong></p>
+        <p> Business Owners: <strong>{{data.business_owners}}</strong></p>
+        <p> Primary Business Address: <strong>{{data.primary_business_address}}</strong></p>
+        <p> Locations: <strong>{{data.locations}}</strong></p>
+        <p style="background-color: lightsalmon;"> Business Financing Needs Summary: <strong>{{data.finance_review}}</strong></p>
+        <p style="background-color: plum;"> Proposed Loan Needs: <strong>{{data.proposed_loan_needs}}</strong></p>
+        <p style="background-color: lightblue;"> Package Includes: <strong>{{data.list_of_report_outcomes}}</strong></p>
+        {% endfor %}
     </div>
 
+    
     <div class="new-operations-forecast">
+        {% for data in bi %}
         <div style="background-color: mediumpurple; text-align: center;">
             <h1><strong>NEW OPERATIONS FORECAST</strong></h1>
-            <p><strong>{{operating_company}}</strong></p>
-            <p><strong>{{project}}</strong></p>
+            <p><strong>{{data.operating_company}}</strong></p>
+            <p><strong>{{data.finance_review}}</strong></p>
         </div>
+        {% endfor %}
+
 
         <p style="background-color: blue;"><strong>Operating Statement</strong></p>
         <table style="width: 100vw; margin-left: auto; margin-right: 0px;">
@@ -38,9 +44,9 @@
             </tr>
             <tr>
                 <th style="margin-left: 0px; margin-right: auto;"># of Locations (Drive Thru/Ground up)</th>
-                <td>{{year_one_locations}}</td>
-                <td>{{year_two_locations}}</td>
-                <td>{{year_three_locations}}</td>
+                <th>{{year_one_locations}}</th>
+                <th>{{year_two_locations}}</th>
+                <th>{{year_three_locations}}</th>
             </tr>
             <tr>
                 <th>Area ({{state}})</th>
@@ -50,9 +56,9 @@
             </tr>
             <tr style="background-color: lightgreen;">
                 <th>Sales</th>
-                <td>{{year_one_sales}}</td>
-                <td>{{year_two_sales}}</td>
-                <td>{{year_three_sales}}</td>
+                <th>{{year_one_sales}}</th>
+                <th>{{year_two_sales}}</th>
+                <th>{{year_three_sales}}</th>
             </tr>
             <tr>
                 <th style="color:red">Cost of Goods Sold</th>
@@ -149,6 +155,7 @@
             </tr>
         </table>
     </div>
+
 
     <div class="personal-financial-statement">
         <h1 style="text-align: center;">Personal Financial Statements</h1>
