@@ -36,122 +36,178 @@
 
         <p style="background-color: blue;"><strong>Operating Statement</strong></p>
         <table style="width: 100vw; margin-left: auto; margin-right: 0px;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Year 1</th>
+                    <th>Year 2</th>
+                    <th>Year 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th style="margin-left: 0px; margin-right: auto;"># of Locations (Drive Thru/Ground up)</th>
+                    {% for data in oy1 %}
+                    <th>{{data.num_of_locations}}</th>
+                    <!-- <th>{{year_two_locations}}</th>
+                    <th>{{year_three_locations}}</th> -->
+                    {% endfor %}
+                </tr>
+            </tbody>
             <tr>
-                <th></th>
-                <th>Year 1</th>
-                <th>Year 2</th>
-                <th>Year 3</th>
-            </tr>
-            <tr>
-                <th style="margin-left: 0px; margin-right: auto;"># of Locations (Drive Thru/Ground up)</th>
-                <th>{{year_one_locations}}</th>
-                <th>{{year_two_locations}}</th>
-                <th>{{year_three_locations}}</th>
-            </tr>
-            <tr>
-                <th>Area ({{state}})</th>
+                <th>Area ({{ state }}) </th>
             </tr>
             <tr>
                 <th style="color:red">Revenue</th>
             </tr>
             <tr style="background-color: lightgreen;">
                 <th>Sales</th>
-                <th>{{year_one_sales}}</th>
-                <th>{{year_two_sales}}</th>
-                <th>{{year_three_sales}}</th>
+                {% for data in oy1 %}
+                
+                <th>{{data.total_sales}}</th>
+                <!-- <th>{{year_two_sales}}</th>
+                <th>{{year_three_sales}}</th> -->
+
+                {% endfor %}
+
             </tr>
             <tr>
                 <th style="color:red">Cost of Goods Sold</th>
             </tr>
             <tr>
                 <th>Food Costs</th>
-                <th>{{year_one_food_costs}}</th>
-                <th>{{year_two_food_costs}}</th>
-                <th>{{year_three_food_costs}}</th>
+                {% for data in oy1 %}
+
+                <th>{{data.food_cost}}</th>
+                <!-- <th>{{year_two_food_costs}}</th>
+                <th>{{year_three_food_costs}}</th> -->
+                {% endfor %}
+
             </tr>
             <tr>
                 <th>Labor Costs</th>
-                <th>{{year_one_labor_costs}}</th>
-                <th>{{year_two_labor_costs}}</th>
-                <th>{{year_three_labor_costs}}</th>
+                
+                {% for data in oy1 %}
+                <th>{{data.labor_cost}}</th>
+                <!-- <th>{{year_two_labor_costs}}</th>
+                <th>{{year_three_labor_costs}}</th> -->
+                {% endfor %}
+
             </tr>
             <tr>
                 <th>Total Cost of Goods Sold</th>
-                <th>{{year_one_total_costs}}</th>
-                <th>{{year_two_total_costs}}</th>
-                <th>{{year_three_total_costs}}</th>
+                
+                {% for data in oy1 %}
+                <th>{{data.total_cost_of_goods}}</th>
+                <!-- <th>{{year_two_total_costs}}</th>
+                <th>{{year_three_total_costs}}</th> -->
+                {% endfor %}
+
             </tr>
             <tr>
                 <th style="color:red">Other Operative Exp</th>
             </tr>
             <tr>
                 <th>Administrative & General</th>
-                <th>{{year_one_ag_costs}}</th>
-                <th>{{year_two_ag_costs}}</th>
-                <th>{{year_three_ag_costs}}</th>
+                {% for data in oy1 %}
+
+                <th>{{data.admin_and_general}}</th>
+                <!-- <th>{{year_two_ag_costs}}</th>
+                <th>{{year_three_ag_costs}}</th> -->
+                {% endfor %}
+
             </tr>
             <tr>
                 <th>Royalty/Sales Mktg</th>
-                <th>{{year_one_rsm_costs}}</th>
-                <th>{{year_two_rsm_costs}}</th>
-                <th>{{year_three_rsm_costs}}</th>
+                {% for data in oy1 %}
+
+                <th>{{data.rands_marketing}}</th>
+                <!-- <th>{{year_two_rsm_costs}}</th>
+                <th>{{year_three_rsm_costs}}</th> -->
+                {% endfor %}
+
             </tr>
             <tr>
                 <th>Facilities</th>
-                <th>{{year_one_facilities_costs}}</th>
-                <th>{{year_two_facilities_costs}}</th>
-                <th>{{year_three_facilities_costs}}</th>
+                {% for data in oy1 %}
+
+                <th>{{data.facilities}}</th>
+                <!-- <th>{{year_two_facilities_costs}}</th>
+                <th>{{year_three_facilities_costs}}</th> -->
+                {% endfor %}
+
             </tr>
             <tr>
                 <th>Total Other Operative Exp</th>
-                <th>{{year_one_total_other_operative_exp}}</th>
-                <th>{{year_two_total_other_operative_exp}}</th>
-                <th>{{year_three_total_other_operative_exp}}</th>
+                {% for data in oy1 %}
+
+                <th>{{data.total_other_operative_expenses}}</th>
+                <!-- <th>{{year_two_total_other_operative_exp}}</th>
+                <th>{{year_three_total_other_operative_exp}}</th> -->
+                {% endfor %}
+
             </tr>
             <tr>
                 <th>Total Operative Exp</th>
-                <th>{{year_one_total_operative_exp}}</th>
-                <th>{{year_two_total_operative_exp}}</th>
-                <th>{{year_three_total_operative_exp}}</th>
+                {% for data in oy1 %}
+
+                <th>{{data.total_operative_expenses}}</th>
+                <!-- <th>{{year_two_total_operative_exp}}</th>
+                <th>{{year_three_total_operative_exp}}</th> -->
+                {% endfor %}
+
             </tr>
             <tr>
                 <th>Income Before Fix Expense</th>
-                <th>{{year_one_income_before_fix_expense}}</th>
-                <th>{{year_two_income_before_fix_expense}}</th>
-                <th>{{year_three_income_before_fix_expense}}</th>
+                {% for data in oy1 %}
+                
+                <th>{{data.income_before_fix_expense}}</th>
+                <!-- <th>{{year_two_income_before_fix_expense}}</th>
+                <th>{{year_three_income_before_fix_expense}}</th> -->
+                {% endfor %}
             </tr>
             <tr>
                 <th style="color:red">Fixed Expense</th>
             </tr>
             <tr>
                 <th>Property Tax</th>
-                <th>{{year_one_property_tax}}</th>
-                <th>{{year_two_property_tax}}</th>
-                <th>{{year_three_property_tax}}</th>
+                {% for data in oy1 %}
+                <th>{{data.propert_tax}}</th>
+                <!-- <th>{{year_two_property_tax}}</th>
+                <th>{{year_three_property_tax}}</th> -->
+                {% endfor %}
             </tr>
             <tr>
                 <th>Insurance</th>
-                <th>{{year_one_insurance}}</th>
-                <th>{{year_two_insurance}}</th>
-                <th>{{year_three_insurance}}</th>
+                {% for data in oy1 %}
+                <th>{{data.insurance}}</th>
+                <!-- <th>{{year_two_insurance}}</th>
+                <th>{{year_three_insurance}}</th> -->
+                {% endfor %}
             </tr>
             <tr>
                 <th>Reserve</th>
-                <th>{{year_one_reserve}}</th>
-                <th>{{year_two_reserve}}</th>
-                <th>{{year_three_reserve}}</th>
+                {% for data in oy1 %}
+                <th>{{data.reserve}}</th>
+                <!-- <th>{{year_two_reserve}}</th>
+                <th>{{year_three_reserve}}</th> -->
+                {% endfor %}
             </tr>
             <tr>
                 <th>Total Fix Expense</th>
-                <th>{{year_one_total_fix_expense}}</th>
-                <th>{{year_two_total_fix_expense}}</th>
-                <th>{{year_three_total_fix_expense}}</th>
+                {% for data in oy1 %}
+                <th>{{data.total_fix_expenses}}</th>
+                <!-- <th>{{year_two_total_fix_expense}}</th>
+                <th>{{year_three_total_fix_expense}}</th> -->
+                {% endfor %}
             </tr>
             <tr style="background-color:plum">
                 <th >Net Income Before Interest & Tax</th>
-                <th>{{year_one_net_income_before_interest_tax}}</th>
-                <th>{{year_two_net_income_before_interest_tax}}</th>
-                <th>{{year_three_net_income_before_interest_tax}}</th>
+                {% for data in oy1 %}
+                <th>{{data.net_income_before_interest_and_tax}}</th>
+                <!-- <th>{{year_two_net_income_before_interest_tax}}</th>
+                <th>{{year_three_net_income_before_interest_tax}}</th> -->
+                {% endfor %}
             </tr>
         </table>
     </div>

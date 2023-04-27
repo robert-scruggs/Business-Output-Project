@@ -293,9 +293,7 @@ def report(request):
 
 def finalReport(request):
     bi = BasicInformation.objects.all()
-    oy1 = OperatingYears.objects.all()[0]
-    oy2 = OperatingYears.objects.all()[1]
-    oy3 = OperatingYears.objects.all()[2]
+    oy1 = OperatingYears.objects.all()
     ty = TaxYears.objects.all()
     pfs = PersonalFinancialStatement.objects.all()
     ffr = FinancialFlashReport.objects.all()
@@ -305,11 +303,10 @@ def finalReport(request):
     context = {
         'bi': bi,
         'oy1': oy1,
-        'oy2': oy2,
-        'oy3': oy3,
         'ty': ty,
         'pfs': pfs,
-        'ffr': ffr
+        'ffr': ffr,
+        'state': oy1[0].state
     }
     
     return render(request, 'practiceReport.html', context)

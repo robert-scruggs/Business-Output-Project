@@ -12,7 +12,7 @@ class BasicInformation(models.Model):
     parent_company = models.CharField( max_length=200)
     business_owners = models.CharField(max_length=200)
     primary_business_address = models.CharField(max_length=200)
-    proposed_loan_needs = models.IntegerField()
+    proposed_loan_needs = models.CharField(max_length=200)
     list_of_report_outcomes = models.TextField(max_length=40000)
  
 class OperatingYears(models.Model):
