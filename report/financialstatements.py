@@ -20,9 +20,6 @@ listoffiles = ['report/pfs/2_PFS_JAMEY CUTTER_052018s.pdf','report/pfs/2_PFS_N M
 #       .split(" ")[indexRightAfterBonds + 1]
 #     )
 
-
-
-
 def getCashOnHand(fileList):
     myList = []
     for file in fileList:
@@ -55,7 +52,6 @@ def getCash():
         sum = x + y
         cashList.append(sum)
     return cashList
-
 
 def getMarketableSecurities(fileList):
     marketableSecuritiesList = []
@@ -117,7 +113,6 @@ def getLifeInsurance(fileList):
         else:
             lifeInsurance.append(int(stocksAndBondsNumber))
     return lifeInsurance
-
 
 def getNotesReceivable(fileList):
     #accounts & notes receivable
@@ -201,7 +196,6 @@ def getTotalAssets(fileList):
         sum = a + b + c
         totalAssetsList.append(sum)
     return totalAssetsList
-
 
 def getTotalREMortgage(fileList):
     #automobiles
@@ -322,4 +316,3 @@ def getAbsoluteTotal():
     #this total is the same as total assets but im gonna rewrite it just because
     absoluteTotal = getTotalAssets(listoffiles)
     return absoluteTotal
-print(getAbsoluteTotal())
