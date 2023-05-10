@@ -1,4 +1,5 @@
 import pdfplumber
+from functools import lru_cache
 
 listoffiles = ["report/pdfs/6_2014 Income Tax Return_CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf",
                "report/pdfs/6_2014_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf",
@@ -32,15 +33,15 @@ secondListoffiles = ["report/pdfs/6_2018 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE 
                     "report/pdfs/2015 Income Tax Return_Patel_JEWELL SOUTH 2015.pdf"
                     ]
 
-filesthatdontwork = [
-                    #"report/pdfs/6_2019 ITR 1065_Delish Real Estate Holdings LLC.pdf",
-                    #"report/pdfs/6_2019 ITR_1065 Delish Brands, LLC.pdf",
-                    #"report/pdfs/6_2020 ITR_Delish Real Estate  Holdings, LLC.pdf",
-    ]
-pdf = pdfplumber.open(secondListoffiles[0])
-text = pdf.pages[6].extract_text()
-if "cBalance. Subtract line 1b from line 1a" in text:
-    print("found")
+# filesthatdontwork = [
+#                     #"report/pdfs/6_2019 ITR 1065_Delish Real Estate Holdings LLC.pdf",
+#                     #"report/pdfs/6_2019 ITR_1065 Delish Brands, LLC.pdf",
+#                     #"report/pdfs/6_2020 ITR_Delish Real Estate  Holdings, LLC.pdf",
+#     ]
+# pdf = pdfplumber.open(secondListoffiles[0])
+# text = pdf.pages[6].extract_text()
+# if "cBalance. Subtract line 1b from line 1a" in text:
+#     print("found")
 
 
 # pdf = pdfplumber.open(secondListoffiles[1])
@@ -79,357 +80,310 @@ if "cBalance. Subtract line 1b from line 1a" in text:
 #         print(x)
 #     return ammortizationList
 
-def getAmortization(fileList):
-    myList = []
-    for file in fileList:
+# def getAmortization(fileList):
+#     myList = []
+#     for file in fileList:
+#         pdf = pdfplumber.open(file)
+#         for page in pdf.pages:
+#             currList = page.extract_text()
+#             if "44 Total. Add amounts in column (f). See the instructions for where to report" and "\nPart VI Amortization(a)\n(b) (c) (d) (e) (f)\n" in currList:
+#                 print("found", page.page_number)
+#                 myList.append(page.extract_text())
+#                 break    
+#     ammortizationList = []
+#     counter = 0
+#     for x in range(0, len(myList)):
+#         keepTrack = myList[counter].split(" ").index("44") + 1
+#         amortization = myList[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
+#         ammortizationList.append(int(amortization))
+#         counter = counter + 1
+
+#     for x in ammortizationList:
+#         print(x)
+#     return ammortizationList
+
+@lru_cache(maxsize=None)
+def getAmortization(file):
+    try:
+        extractedText = ""
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text()
             if "44 Total. Add amounts in column (f). See the instructions for where to report" and "\nPart VI Amortization(a)\n(b) (c) (d) (e) (f)\n" in currList:
                 print("found", page.page_number)
-                myList.append(page.extract_text())
+                extractedText = page.extract_text()
                 break    
-    ammortizationList = []
-    counter = 0
-    for x in range(0, len(myList)):
-        keepTrack = myList[counter].split(" ").index("44") + 1
-        amortization = myList[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
-        ammortizationList.append(int(amortization))
-        counter = counter + 1
-
-    for x in ammortizationList:
-        print(x)
-    return ammortizationList
+        keepTrack = extractedText.split(" ").index("44") + 1
+        amortization = extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
+        return int(amortization)
+    except:
+        return 213
 
 # interest does not work for all files, needs consistent files
+# print(getAmortization("report/pdfs/6_2017_CHR Amended 2017 Taxes.pdf"))
 
-
-def getInterest():
-    interestPages = []
-    for file in listoffiles:
+@lru_cache(maxsize=None)
+def getInterest(file):
+    try:
+        extractedText = ""
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text().split(" ")
             for item in currList:
                 if "1065" and "U.S." and "Return" and "of" and "Partnership" and "Income\nOMB" in item:
                     print("found")
-                    interestPages.append(page.extract_text())
-    interestList = []
-    counter = 1
-    for x in range(1, len(interestPages), 2):
-        keepTrack = interestPages[counter].split(" ").index("15") + 1
-        interest = interestPages[counter].split(" ")[keepTrack].split("\n")[
-            0].replace(",", "").replace(".", "")
-        interestList.append(int(interest))
-        counter = counter + 2
+                    extractedText = page.extract_text()
 
-    for x in interestList:
-        print(x)
-    return interestList
+        keepTrack = extractedText.split(" ").index("15") + 1
+        interest = extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
+        return int(interest)
+    except:
+        return 213
 
 
-def getDepreciation(fileList):
-    depreciationPages = []
-    depreciationNumList = []
-    counter = 0
-
-    def depreciationMethod(num):
-        keepTrack = depreciationPages[counter].split(" ").index(num) + 1
-        depreciation = int(depreciationPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", ""))
-        depreciationNumList.append(depreciation)
-         
-
-    for file in fileList:
+@lru_cache(maxsize=None)
+def getDepreciation(file):
+    try:
+        extractedText = ""
+        def depreciationMethod(num):
+            keepTrack = extractedText.split(" ").index(num) + 1
+            depreciation = int(extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", ""))
+            return depreciation
+            
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text()
             # 1065
             if "16 aDepreciation (if required, attach Form 4562)" in currList or "16a Depreciation (if required, attach Form 4562)" in currList:
                 print("found", page.page_number, file)
-                depreciationPages.append(page.extract_text())
-                depreciationMethod("16a")
-                counter = counter + 1
-                break
+                extractedText = page.extract_text()
+                return depreciationMethod("16a")
             # 1120
             elif "14 Depreciation not claimed on Form 1125-A or elsewhere on return (attach Form 4562)" in currList:
                 print("found", page.page_number, file)
-                depreciationPages.append(page.extract_text())
-                depreciationMethod("14")
-                counter = counter + 1
-                break
-                
-    for x in depreciationNumList:
-        print(x)
-    return depreciationNumList
-#getDepreciation(listoffiles)
-#getDepreciation(secondListoffiles)
+                extractedText = page.extract_text()
+                return depreciationMethod("14")       
+    except:
+        return 213
+# print(getDepreciation("report/pdfs/6_2014 Income Tax Return_CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf"))
 
 
-# cashflow not done yet, will come back to finish
-def getCashFlow():
-    cashFlowList = []
-    ammortizationList = getAmortization()
-    interestList = getInterest()
-    depreciationList = getDepreciation()
+@lru_cache(maxsize=None)
+def getCashFromSales(file):
+    try: 
+        extractedText = ""
 
-    cashFlowList.append(
-        ammortizationList[0] + interestList[0] + depreciationList[0])
-
-    print(ammortizationList[0], interestList[0], depreciationList[0])
-    print(cashFlowList[0])
-# cash from sales 1c.
-
-
-def getCashFromSales(fileList):
-    cashFromSalesPages = []
-    cashFromSalesList = []
-    counter = 0
-
-    for file in fileList:
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text()
             if "c Balance. Subtract line 1b from line 1a " in currList:
                 print("found", file)
-                cashFromSalesPages.append(page.extract_text())
+                extractedText = page.extract_text()
                 break
             elif "cBalance. Subtract line 1b from line 1a" in currList:
                 print("found", file)
-            else:
-                print("not found", file)
+                extractedText = page.extract_text()
                 break
-    
-    for x in range(0, len(cashFromSalesPages)):
-        keepTrack = cashFromSalesPages[counter].split(" ").index("1c") + 1
-        cashfromSales = cashFromSalesPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
-        cashFromSalesList.append(int(cashfromSales))
-        counter = counter + 1
-    
-    for x in cashFromSalesList:
-        print(x)
-    return cashFromSalesList
-getCashFromSales(secondListoffiles)
+
+        keepTrack = extractedText.split(" ").index("1c") + 1
+        cashfromSales = extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
+        return int(cashfromSales)
+    except:
+        return 213
+
 # gross cash income
 
 
-def getGrossCashIncome():
-    grossCashIncomePages = []
-    for file in listoffiles:
+@lru_cache(maxsize=None)
+def getGrossCashIncome(file):
+    try: 
+        extractedText = ""
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text().split(" ")
             for item in currList:
                 if "1065" and "U.S." and "Return" and "of" and "Partnership" and "Income\nOMB" in item:
                     print("found")
-                    grossCashIncomePages.append(page.extract_text())
-    grossCashIncomeList = []
-    counter = 1
-    for x in range(1, len(grossCashIncomePages), 2):
-        keepTrack = grossCashIncomePages[counter].split(" ").index("3") + 1
-        grossCashIncome = grossCashIncomePages[counter].split(
-            " ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
-        grossCashIncomeList.append(int(grossCashIncome))
-        counter = counter + 2
-    for x in grossCashIncomeList:
-        print(x)
-    return grossCashIncomeList
+                    extractedText = page.extract_text()
+
+        keepTrack = extractedText.split(" ").index("3") + 1
+        grossCashIncome = extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
+        return int(grossCashIncome)
+    except:
+        return 213
 # cash operating expenses
 
 
-def getCashOperatingExpenses():
-    cashOperatingExpensesPages = []
-    for file in listoffiles:
+@lru_cache(maxsize=None)
+def getCashOperatingExpenses(file):
+    try:
+        extractedText = ""
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text().split(" ")
             for item in currList:
                 if "1065" and "U.S." and "Return" and "of" and "Partnership" and "Income\nOMB" in item:
                     print("found")
-                    cashOperatingExpensesPages.append(page.extract_text())
-    cashOperatingExpensesList = []
-    counter = 1
-    for x in range(1, len(cashOperatingExpensesPages), 2):
-        keepTrack = cashOperatingExpensesPages[counter].split(
-            " ").index("21") + 1
-        cashOperatingExpense = cashOperatingExpensesPages[counter].split(
-            " ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
-        cashOperatingExpensesList.append(int(cashOperatingExpense))
-        counter = counter + 2
-    for x in cashOperatingExpensesList:
-        print(x)
-    return cashOperatingExpensesList
+                    extractedText = page.extract_text()
+
+        keepTrack = extractedText.split(" ").index("21") + 1
+        cashOperatingExpense = extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
+        
+        return int(cashOperatingExpense)
+    except:
+        return 213
 # other income expensese
 
 
-def getOtherIncomeExpenses():
-    otherIncomeExpensesPages = []
-    for file in listoffiles:
+@lru_cache(maxsize=None)
+def getOtherIncomeExpenses(file):
+    try:
+        extractdText = ""
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text().split(" ")
             for item in currList:
                 if "1065" and "U.S." and "Return" and "of" and "Partnership" and "Income\nOMB" in item:
                     print("found")
-                    otherIncomeExpensesPages.append(page.extract_text())
-    otherIncomeExpensesList = []
-    counter = 1
-    for x in range(1, len(otherIncomeExpensesPages), 2):
-        keepTrack = otherIncomeExpensesPages[counter].split(" ").index("7") + 1
-        cashOperatingExpense = otherIncomeExpensesPages[counter].split(
-            " ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
-        # print(cashOperatingExpense, x)
+                    extractdText = page.extract_text()
+
+
+        keepTrack = extractdText.split(" ").index("7") + 1
+        cashOperatingExpense = extractdText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
+
         if "(cid:127)" in cashOperatingExpense:
-            otherIncomeExpensesList.append(0)
+            return 0
         else:
-            otherIncomeExpensesList.append(int(cashOperatingExpense))
-        counter = counter + 2
-    for x in otherIncomeExpensesList:
-        print(x)
-    return otherIncomeExpensesList
+            return int(cashOperatingExpense)
+    except:
+        return 213
 # net cash after operations
 
 
-def getNetCashAfterOperations():
-    netCashAfterOperationsPages = []
-    for file in listoffiles:
+@lru_cache(maxsize=None)
+def getNetCashAfterOperations(file):
+    try: 
+        extractedText = ""
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text().split(" ")
             for item in currList:
                 if "1065" and "U.S." and "Return" and "of" and "Partnership" and "Income\nOMB" in item:
                     print("found")
-                    netCashAfterOperationsPages.append(page.extract_text())
-    netCashAfterOperationsList = []
-    counter = 1
-    for x in range(1, len(netCashAfterOperationsPages), 2):
-        keepTrack = netCashAfterOperationsPages[counter].split(
-            " ").index("penalties") - 1
-        cashOperatingExpense = netCashAfterOperationsPages[counter].split(
-            " ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
-        netCashAfterOperationsList.append(int(cashOperatingExpense))
-        counter = counter + 2
-    for x in netCashAfterOperationsList:
-        print(x)
-    return netCashAfterOperationsList
+                    extractedText = page.extract_text()
 
+        keepTrack = extractedText.split(" ").index("penalties") - 1
+        cashOperatingExpense = extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
 
-def getScheduleKLine13A():
-    netCashAfterOperationsPages = []
-    for file in listoffiles:
+        return int(cashOperatingExpense)
+    except:
+        return 213
+
+@lru_cache(maxsize=None)
+def getScheduleKLine13A(file):
+    try: 
+        extractedText = ""
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text().split(" ")
             for item in currList:
-                if "16c\nsnoitcasnarT\nForeign" and "level\ndPassive" in item:
+                if "16c\nsnoitcasnarT\nForeign" and "level\ndprintPassive" in item:
                     print("found")
-                    netCashAfterOperationsPages.append(page.extract_text())
-    netCashAfterOperationsList = []
-    counter = 1
-    #got rid of the replace("-","")
-    for x in range(1, len(netCashAfterOperationsPages), 2):
-        keepTrack = netCashAfterOperationsPages[counter].split(
-            " ").index("13a") + 1
-        cashOperatingExpense = netCashAfterOperationsPages[counter].split(
-            " ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
-        netCashAfterOperationsList.append(int(cashOperatingExpense))
-        counter = counter + 2
-    for x in netCashAfterOperationsList:
-        print(x)
-    return netCashAfterOperationsList
+                    extractedText = page.extract_text()
+        #got rid of the replace("-","")
+        keepTrack = extractedText.split(" ").index("13a") + 1
+        cashOperatingExpense = extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
+
+        return int(cashOperatingExpense)
+    except:
+        return 213
 
 
-def getScheduleM1Line4B():
-    netCashAfterOperationsPages = []
-    for file in listoffiles:
+@lru_cache(maxsize=None)
+def getScheduleM1Line4B(file):
+    try: 
+        extractedText = ""
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text().split(" ")
             for item in currList:
                 if "7~~~~~~~~~~~~~\nbTravel" in item:
                     print("found")
-                    netCashAfterOperationsPages.append(page.extract_text())
-    netCashAfterOperationsList = []
-    counter = 1
-    for x in range(1, len(netCashAfterOperationsPages), 2):
-        keepTrack = netCashAfterOperationsPages[counter].split(" ").index("7~~~~~~~~~~~~~\nbTravel") + 5
+                    extractedText = page.extract_text()
+
+        keepTrack = extractedText.split(" ").index("7~~~~~~~~~~~~~\nbTravel") + 5
         #got rid of the replace("-","")
-        cashOperatingExpense = netCashAfterOperationsPages[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
+        cashOperatingExpense = extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
         if int(cashOperatingExpense) == 9:
-            cashOperatingExpense = netCashAfterOperationsPages[counter].split(" ")[keepTrack - 1].split("\n")[0].replace(",", "").replace(".", "")
-            netCashAfterOperationsList.append(int(cashOperatingExpense))
+            cashOperatingExpense = extractedText.split(" ")[keepTrack - 1].split("\n")[0].replace(",", "").replace(".", "")
+            return int(cashOperatingExpense)
         else:
-            netCashAfterOperationsList.append(int(cashOperatingExpense))
-        counter = counter + 2
-    for x in netCashAfterOperationsList:
-        print(x)
-    return netCashAfterOperationsList
+            return int(cashOperatingExpense)
+    except:
+        return 213
 # m1 deductions comes from schedule k line 13a + schedule m1 line 4b, use two helper functions to get the result you need
 # it works but one of the numbers dont add up, i belive its the original pdf sent to me because all other numbers add up
 # will have to edit a little bit but it works as expected right now
-def getM1Deductions():
-    line13AList = getScheduleKLine13A()
-    line4BList = getScheduleM1Line4B()
-    m1DeductionsList = []
-    for x, y in zip(line13AList,line4BList):
-        sum = x + y
-        m1DeductionsList.append(sum)
-    print(m1DeductionsList)
-    return m1DeductionsList
+@lru_cache(maxsize=None)
+def getM1Deductions(file):
+    try: 
+        line13AList = getScheduleKLine13A(file)
+        line4BList = getScheduleM1Line4B(file)
+        
+        return line13AList + line4BList
+    except:
+        return 213
 #getM1Deductions()
-def getM2Deductions():
-    netCashAfterOperationsPages = []
-    for file in listoffiles:
+@lru_cache(maxsize=None)
+def getM2Deductions(file):
+    try: 
+        extractedText = ""
         pdf = pdfplumber.open(file)
         for page in pdf.pages:
             currList = page.extract_text().split(" ")
             for item in currList:
                 if "7~~~~~~~~~~~~~\nbTravel" in item:
                     print("found")
-                    netCashAfterOperationsPages.append(page.extract_text())
-    netCashAfterOperationsList = []
-    counter = 1
-    for x in range(1, len(netCashAfterOperationsPages), 2):
-        keepTrack = netCashAfterOperationsPages[counter].split(" ").index("(itemize):\n3")
-        cashOperatingExpense = netCashAfterOperationsPages[counter].split(" ")[keepTrack].split("\n")[1]
+                    extractedText = page.extract_text()
+
+        
+        keepTrack = extractedText.split(" ").index("(itemize):\n3")
+        cashOperatingExpense = extractedText.split(" ")[keepTrack].split("\n")[1]
         if int(cashOperatingExpense) == 3:
-            netCashAfterOperationsList.append(0)
+            return 0
         else:
-            netCashAfterOperationsList.append(int(cashOperatingExpense))
-        counter = counter + 2
-    for x in netCashAfterOperationsList:
-        print(x)
-    return netCashAfterOperationsList
+            return int(cashOperatingExpense)
+    except:
+        return 213
+# print(getM2Deductions("report/pdfs/6_2014 Income Tax Return_CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf"))
 
-def getEndingCashPosition():
-    netCashList = getNetCashAfterOperations()
-    m1DeductionsList = getM1Deductions()
-    m2DeductionsList = getM2Deductions()
-    endingCashPositionList = []
-    #was told that x y and z should be subtracted but i was getting the wrong numbers based on the excel sheet given so i changed to addition and numbers are accurate now
-    for x,y,z in zip(netCashList,m1DeductionsList,m2DeductionsList):
-        sum = x - y - z
-        endingCashPositionList.append(sum)
-    print("Ending cash position list:", endingCashPositionList)
-    return endingCashPositionList
-#getEndingCashPosition()
+@lru_cache(maxsize=None)
+def getEndingCashPosition(file):
+    try: 
+        netCashList = getNetCashAfterOperations(file)
+        m1DeductionsList = getM1Deductions(file)
+        m2DeductionsList = getM2Deductions(file)
 
-def getCashFlow():
-    endingCashPositionList = getEndingCashPosition()
-    depreciationList = getDepreciation()
-    amortizationList = getAmortization()
-    interestList = getInterest()
-    netcashlist = getNetCashAfterOperations()
-    cashFlowList = []
+        #was told that x y and z should be subtracted but i was getting the wrong numbers based on the excel sheet given so i changed to addition and numbers are accurate now
+        
+        return netCashList - m1DeductionsList - m2DeductionsList
+    except:
+        return 213
 
-    for x,y,z,p in zip(endingCashPositionList,depreciationList,amortizationList,interestList):
-        sum = x + y + z + p
-        cashFlowList.append(sum)
-    print("net cash list:",netcashlist)
-    print("ending cash position list:", endingCashPositionList)
-    print("depreciation list:", depreciationList)
-    print("amortization list:", amortizationList)
-    print("interest list:", interestList)
-    print("Cash flow list:", cashFlowList)
+@lru_cache(maxsize=None)
+def getCashFlow(file):
+    try: 
+        endingCashPositionList = getEndingCashPosition(file)
+        depreciationList = getDepreciation(file)
+        amortizationList = getAmortization(file)
+        interestList = getInterest(file)
+    
+
+        return endingCashPositionList + depreciationList + amortizationList + interestList
+    except:
+        return 213
+
+# print(getCashFlow("report/pdfs/6_2014_CUTTER HIGHLANDS RANCH, LLC 1065 CLNT.pdf"))
 
 # pdf = pdfplumber.open(listoffiles[1])
 # page = pdf.pages[21].extract_text().split(" ")

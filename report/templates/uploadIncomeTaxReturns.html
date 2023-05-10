@@ -1,17 +1,107 @@
 {% block content %}
-  <h1>Please upload Income Tax Returns</h1>
+<h1>Please upload Income Tax Returns</h1>
+<p>Add as many income tax returns as needed</p>
+<p>Press the submit button after adding all tax returns</p>
+<p>Please fill out all details below</p>
+
   <form method="post" enctype="multipart/form-data" action="">
     {% csrf_token %}
-    <input type="file" name="file">
+    <label for="businessName">Name of business associated with tax returns:</label>
+    <input type="text" name="businessName">
+    <br>
+    <br>
+    <label for="address">Address of Business:</label>
+    <input type="text" name="address">
+    <br>
+    <br>
+    <label for="owners">List owners and separate with commas: </label>
+    <input type="text" name="owners">
+    <br>
+    <br>
+    <label for="yearsInBusiness">How many years has this business been running for:</label>
+    <input type="text" name="yearsInBusiness">
+    <br>
+    <br>
+    <label for="locations">Please enter locations and store numbers: </label>
+    <br>
+    <label>Example: Starbucks (1882), McDonalds (1505) </label>
+    <input type="text" name="locations">
+    <br>
+    <br>
+    <label for="files">You will need to submit tax returns one business at a time. <br> Please select all years and select them in order at the same time and then press submit below.</label>
+    <input type="file" name="files" id="file" multiple>
     <br>
     <br>
     <br>
-    <button type="submit">Upload</button>
+    <button type="submit" id="submit">Submit</button>
   </form>
+  
+  <div id="fileList" style="border: 1px solid black; display: flex; justify-content: space-evenly;" >
+    <p>Currently Submitted Files: </p>
+    {% for data in ffr%}
+      {{data.file}}
+      <br>
+    {%endfor%}
+  </div>
+
+
   <br>
   <br>
   <a href="{% url 'personalFinancialStatementFiles' %}">Personal Financial Statment</a>
   <br>
   <br>
+  <a href="{% url 'incomeTaxReturnFiles' %}">Income Tax Return</a>
+  <br>
+  <br>
   <a href="{% url 'finalReport' %}">Final Report</a>
+
+  <script>
+    const input = document.getElementById('file');
+    let nreList = []
+    let managementFeesList = []
+    let statementDateList = []
+
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    input.addEventListener('submit', function() {
+      const files = Array.from(input.files)
+      
+      files.forEach(file => {
+        const nre = window.prompt("Please enter NRE amount for " + file.name)
+        const managementFees = window.prompt("Please enter owner management fees for " + file.name)
+        const statementDate = window.prompt("Please enter date of statement in mm/dd/yyyy format: " + file.name)
+        
+        
+        nreList.push(nre)
+        managementFeesList.push(managementFees)
+        statementDateList.push(statementDate)
+    
+      });
+      
+      const data = {
+        nreList: nreList,
+        managementFeesList: managementFeesList,
+        statementDateList: statementDateList
+      }
+      
+      fetch('/incomeTaxReturnFiles/',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+    
+    });
+    
+    
+  </script>
 {% endblock %}

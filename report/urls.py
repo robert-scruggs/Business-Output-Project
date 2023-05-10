@@ -19,14 +19,12 @@ urlpatterns = [
     path('yearOne/', views.yearOne, name='yearOne'),
     path('yearTwo/', views.yearTwo, name='yearTwo'),
     path('yearThree/', views.yearThree, name='yearThree'),
-    # path('taxyears/', views.taxYears),
+    path('incomeTaxReturnFiles/', views.incomeTaxReturnFiles, name='incomeTaxReturnFiles'),
+    path('personalFinancialStatementFiles/', views.personalFinancialStatementFiles, name='personalFinancialStatementFiles'),
+    path('finalReport/', views.finalReport, name='finalReport'),
     path('register/', views.register, name='register'),
     path('login/', views.loginUser, name='login'),
     path('logout/', views.logoutUser, name='logout'),
-    path('incomeTaxReturnFiles/', views.incomeTaxReturnFiles, name='incomeTaxReturnFiles'),
-    path('personalFinancialStatementFiles/', views.personalFinancialStatementFiles, name='personalFinancialStatementFiles'),
-    path('report/', views.report),
-    path('finalReport/', views.finalReport, name='finalReport'),
 ]
 
 

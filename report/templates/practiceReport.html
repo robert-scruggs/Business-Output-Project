@@ -220,8 +220,8 @@
             </tr>
         </table>
     </div>
-
-    
+    <br>
+    <br>
     <div class="personal-financial-statement" style="display: flex; flex-direction: row; justify-content: space-around; border: 1px solid black;">
         <div class="labels" style="display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
             <h4 style="color: red;">Personal Financial Statements</h4>
@@ -282,293 +282,207 @@
             <h4>{{data.grand_total}}</h4>
         </div>
         {%endfor%}
-        
-        <!-- <h1 style="text-align: center;">Personal Financial Statements</h1>
-        <table id="pfs" style="width:100%;">
-            {%for data in pfs%}
-            <tr>
-                <th></th>
-                <th>Robert Scruggs</th>
-            </tr>
-            <tr>
-                {% if forloop.first %}
-                <td><b>Assets</b></td>
-                {% endif %}
-              </tr>
-              <tr>
-                <td>Cash</td>
-                <td>{{data.cash}}</td>
-              </tr>
-              <tr>
-                <td>Marketable Securities</td>
-                <td>{{data.marketable_securities}}</td>
-              </tr>
-              <tr>
-                <td>Total Liquid Assets</td>
-                <td>{{data.total_liquid_assets}}</td>
-              </tr>
-              {%endfor%}
-        </table> -->
-
-
-        <!-- <table style="display: flex; flex-direction: row;">
-            <tr>
-                <th>Owner 1: {{owner}} (Monthly Pmts)</th>
-            </tr>
-            <tr>
-                <th><h2>Assets</h4></th>
-            </tr>
-            <tr>
-                <th>Cash</th>
-                <th>{{cash}}</th>
-            </tr>
-            <tr>
-                <th>Marketable Securities</th>
-                <th>{{marketable_securities}}</th>
-            </tr>
-            <tr>
-                <th>Total Liquid Assets</th>
-                <th>{{total_liquid_assets}}</th>
-            </tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr>
-                <th>Real Estate</th>
-                <th>{{real_estate}}</th>
-            </tr>
-            <tr>
-                <th>Primary Residence</th>
-                <th>{{primary_residence1}}</th>
-            </tr>
-            <tr>
-                <th>Total Real Estate</th>
-                <th>{{total_real_estate}}</th>
-            </tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr>
-                <th>Other Assets</th>
-                <th>{{other_assets}}</th>
-            </tr>
-            <tr>
-                <th>IRA/401K</th>
-                <th>{{ira_401k}}</th>
-            </tr>
-            <tr>
-                <th>Life Insurance</th>
-                <th>{{life_insurance}}</th>
-            </tr>
-            <tr>
-                <th>Notes Receivable</th>
-                <th>{{notes_receivable}}</th>
-            </tr>
-            <tr>
-                <th>Business Values</th>
-                <th>{{business_values}}</th>
-            </tr>
-            <tr>
-                <th>Automobiles</th>
-                <th>{{automobiles}}</th>
-            </tr>
-            <tr>
-                <th>Personal Property</th>
-                <th>{{personal_property}}</th>
-            </tr>
-            <tr>
-                <th>Total Other Assets</th>
-                <th>{{total_other_assets}}</th>
-            </tr>
-            <tr style="background-color: skyblue;">
-                <th>Total Assets</th>
-                <th>{{total_assets}}</th>
-            </tr>
-
-            <tr>
-                <th><h2>Liabilites</h4></th>
-            </tr>
-            <tr>
-                <th>Primary Residence</th>
-                <th>{{primary_residence2}}</th>
-            </tr>
-            <tr>
-                <th>Total RE Mortgage</th>
-                <th>{{total_re_mortgage}}</th>
-            </tr>
-            <tr>
-                <th>Accounts Payable</th>
-                <th>{{accounts_payable}}</th>
-            </tr>
-            <tr>
-                <th>Notes Payable</th>
-                <th>{{notes_payable}}</th>
-            </tr>
-            <tr>
-                <th>Installment Accounts</th>
-                <th>{{installment_accounts}}</th>
-            </tr>
-            <tr style="background-color: lightsalmon;">
-                <th>Total Liabilites</th>
-                <th>{{total_liabilites}}</th>
-            </tr>
-            <tr style="background-color: darksalmon;">
-                <th>Net Worth</th>
-                <th>{{net_worth}}</th>
-            </tr>
-            <tr style="background-color: skyblue;">
-                <th>Total</th>
-                <th>{{overall_total}}</th>
-            </tr>
-            <tr>
-                <th>Owner 1: {{owner}} (Monthly Pmts)</th>
-            </tr>
-            <tr>
-                <th><h2>Assets</h4></th>
-            </tr>
-            <tr>
-                <th>Cash</th>
-                <th>{{cash}}</th>
-            </tr>
-            <tr>
-                <th>Marketable Securities</th>
-                <th>{{marketable_securities}}</th>
-            </tr>
-            <tr>
-                <th>Total Liquid Assets</th>
-                <th>{{total_liquid_assets}}</th>
-            </tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr>
-                <th>Real Estate</th>
-                <th>{{real_estate}}</th>
-            </tr>
-            <tr>
-                <th>Primary Residence</th>
-                <th>{{primary_residence1}}</th>
-            </tr>
-            <tr>
-                <th>Total Real Estate</th>
-                <th>{{total_real_estate}}</th>
-            </tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr></tr>
-            <tr>
-                <th>Other Assets</th>
-                <th>{{other_assets}}</th>
-            </tr>
-            <tr>
-                <th>IRA/401K</th>
-                <th>{{ira_401k}}</th>
-            </tr>
-            <tr>
-                <th>Life Insurance</th>
-                <th>{{life_insurance}}</th>
-            </tr>
-            <tr>
-                <th>Notes Receivable</th>
-                <th>{{notes_receivable}}</th>
-            </tr>
-            <tr>
-                <th>Business Values</th>
-                <th>{{business_values}}</th>
-            </tr>
-            <tr>
-                <th>Automobiles</th>
-                <th>{{automobiles}}</th>
-            </tr>
-            <tr>
-                <th>Personal Property</th>
-                <th>{{personal_property}}</th>
-            </tr>
-            <tr>
-                <th>Total Other Assets</th>
-                <th>{{total_other_assets}}</th>
-            </tr>
-            <tr style="background-color: skyblue;">
-                <th>Total Assets</th>
-                <th>{{total_assets}}</th>
-            </tr>
-
-            <tr>
-                <th><h2>Liabilites</h4></th>
-            </tr>
-            <tr>
-                <th>Primary Residence</th>
-                <th>{{primary_residence2}}</th>
-            </tr>
-            <tr>
-                <th>Total RE Mortgage</th>
-                <th>{{total_re_mortgage}}</th>
-            </tr>
-            <tr>
-                <th>Accounts Payable</th>
-                <th>{{accounts_payable}}</th>
-            </tr>
-            <tr>
-                <th>Notes Payable</th>
-                <th>{{notes_payable}}</th>
-            </tr>
-            <tr>
-                <th>Installment Accounts</th>
-                <th>{{installment_accounts}}</th>
-            </tr>
-            <tr style="background-color: lightsalmon;">
-                <th>Total Liabilites</th>
-                <th>{{total_liabilites}}</th>
-            </tr>
-            <tr style="background-color: darksalmon;">
-                <th>Net Worth</th>
-                <th>{{net_worth}}</th>
-            </tr>
-            <tr style="background-color: skyblue;">
-                <th>Total</th>
-                <th>{{overall_total}}</th>
-            </tr>
-        </table> -->
     </div>
+    <br>
+    <br>
+    <div class="financialFlashReports" style="width: 100vw; ">
+        <h2>FINANCIAL FLASH RPT - CUTTER HIGHLANDS RANCH</h2>
+        <div class="top-portion" style=" display: flex; flex-direction: column; width: 100%;">
+            <h4 style="background-color: rgb(214, 18, 214); width: 100%;">General Customer Information</h4>
+            <div style="display: flex; flex-direction: column; justify-content: flex-start;">
+                <p>Company Name: <b>Cutter Highlands Ranch, LLC</b> </p> 
+                <p>Address: <b>2188 Wynterbrook Dr, Highlands Ranch, CO 80126</b> </p> 
+                <p>Owners Name(s): <b>John Cutter, Jamey Cutter</b> </p> 
+                <p>How many years in current business: <b>7.5</b> </p>
+                <div style="display: flex; flex-direction: row; justify-content: space-between; width: 1000px;">
+                    <b>Current Business Structure: </b> 
+                    <div>
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <b style="background-color: rgba(254, 166, 2, 0.61); width: 100%;">Cutter Highlands Ranch, LLC</b>
+                            <b>Owners: John & Jamey Cutter, Locations: Highlands Ranch (1505), SouthGlenn(1528)</b>
+                        </div>
+                        <br>
+                        <div style="display: flex; flex-direction: column; ">
+                            <b style="background-color: rgba(254, 166, 2, 0.61); width: 100%;">Cutter Highlands Ranch, LLC</b>
+                            <b>Owners: John & Jamey Cutter, Locations: Highlands Ranch (1505), SouthGlenn(1528)</b>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="taxYears" style="display: flex; flex-direction: row; justify-content: space-around; background-color: lightgoldenrodyellow;">
+            <p style="text-align: center;">Type of Statement <br>
+                # of Months: <br>
+               Date of Statement:</p>
+            <p style="text-align: center;">Tax <br> 12 <br> 12/31/14</p>
+            <p style="text-align: center;">Tax <br> 12 <br> 12/31/15</p>
+            <p style="text-align: center;">Tax <br> 12 <br> 12/31/16</p>
+            <p style="text-align: center;">Year End PL <br> 12 <br> 12/31/17</p>
+        </div>
+        <br>
+        <br>
+        <div class="cash-flow-forecast-flash" style="border: 1px solid black;">
+            <p style="text-align: center;"><b>Cash Flow Forecast Flash</b></p>
+            <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <p style="text-align: center;"><b>Cash from Sales</b></p>
+                    <p style="text-align: center;">Gross Cash Income</p>
+                    <p style="text-align: center;">Cash Operating Expenses</p>
+                    <p style="text-align: center;">Other Income (Expense)</p>
+                    <p style="text-align: center;">Net Cash after Operations</p>
+                    <p style="text-align: center;">M1 Net Deductions</p>
+                    <p style="text-align: center;">M2 Net Deductions</p>
+                    <p style="text-align: center;">Ending Cash Position</p>
+                    <p style="text-align: center;">Addbacks</p>
+                    <p style="text-align: center;">Depreciation</p>
+                    <p style="text-align: center;">Amortization</p>
+                    <p style="text-align: center;">Interest</p>
+                    <p style="text-align: center;">NRE</p>
+                    <p style="text-align: center;">Owners Management Fees</p>
+                    <p style="text-align: center;">Cash Flow</p>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <p style="text-align: center;"><b>456</b></p>
+                    <p style="text-align: center;">213</p>
+                    <p style="text-align: center;">124</p>
+                    <p style="text-align: center;">324</p>
+                    <p style="text-align: center;">235</p>
+                    <p style="text-align: center;">654</p>
+                    <p style="text-align: center;">654</p>
+                    <p style="text-align: center;">645</p>
+                    <p style="text-align: center;">3456</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">9786</p>
+                    <p style="text-align: center;">534</p>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <p style="text-align: center;"><b>456</b></p>
+                    <p style="text-align: center;">213</p>
+                    <p style="text-align: center;">124</p>
+                    <p style="text-align: center;">324</p>
+                    <p style="text-align: center;">235</p>
+                    <p style="text-align: center;">654</p>
+                    <p style="text-align: center;">654</p>
+                    <p style="text-align: center;">645</p>
+                    <p style="text-align: center;">3456</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">9786</p>
+                    <p style="text-align: center;">534</p>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <p style="text-align: center;"><b>456</b></p>
+                    <p style="text-align: center;">213</p>
+                    <p style="text-align: center;">124</p>
+                    <p style="text-align: center;">324</p>
+                    <p style="text-align: center;">235</p>
+                    <p style="text-align: center;">654</p>
+                    <p style="text-align: center;">654</p>
+                    <p style="text-align: center;">645</p>
+                    <p style="text-align: center;">3456</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">9786</p>
+                    <p style="text-align: center;">534</p>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <p style="text-align: center;"><b>456</b></p>
+                    <p style="text-align: center;">213</p>
+                    <p style="text-align: center;">124</p>
+                    <p style="text-align: center;">324</p>
+                    <p style="text-align: center;">235</p>
+                    <p style="text-align: center;">654</p>
+                    <p style="text-align: center;">654</p>
+                    <p style="text-align: center;">645</p>
+                    <p style="text-align: center;">3456</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">3567</p>
+                    <p style="text-align: center;">9786</p>
+                    <p style="text-align: center;">534</p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="operationsAbilityToCoverNewDebt" style="border: 1px solid black;">
+            <p style="text-align: center;"><b>Operations Ability to Cover new debt</b></p>
+            <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <p style="text-align: center;"><b>Operational Cash</b></p>
+                    <p style="text-align: center;"><b>Gross Cash Income</b> </p>
+                    <p style="text-align: center; background-color: yellow;">New Debt Service</p>
+                    <p style="text-align: center;">= Surplus</p>
+                    <p style="text-align: center; background-color: lightgreen;">Coverage Ratio</p>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <p style="text-align: center;"><b>456</b></p>
+                    <p style="text-align: center;">213</p>
+                    <p style="text-align: center;">124</p>
+                    <p style="text-align: center;">324</p>
+                    <p style="text-align: center;">235</p>
 
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <p style="text-align: center;"><b>456</b></p>
+                    <p style="text-align: center;">213</p>
+                    <p style="text-align: center;">124</p>
+                    <p style="text-align: center;">324</p>
+                    <p style="text-align: center;">235</p>
 
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <p style="text-align: center;"><b>456</b></p>
+                    <p style="text-align: center;">213</p>
+                    <p style="text-align: center;">124</p>
+                    <p style="text-align: center;">324</p>
+                    <p style="text-align: center;">235</p>
+            
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                    <p style="text-align: center;"><b>456</b></p>
+                    <p style="text-align: center;">213</p>
+                    <p style="text-align: center;">124</p>
+                    <p style="text-align: center;">324</p>
+                    <p style="text-align: center;">235</p>
+                
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="financialFootnotes" style="border: 1px solid black;">
+            <p style="text-align: center;"><b>Financial Footnotes</b> </p>
+            <p>-CHR has no debt</p>
+        </div>
+    </div>
+    
 </body>
 </html>
 
+<!-- {{data.cash_from_sales}}
+{{data.gross_cash_income}}
+{{data.cash_operating_expenses}}
+{{data.other_income}}
+{{data.net_cash_after_operations}}
+{{data.m1_net_deductions}}
+{{data.m2_net_deductions}}
+{{data.ending_cash_position}}
+{{data.depreciation}}
+{{data.amortization}}
+{{data.interest}}
+{{data.nre}}
+{{data.owners_management_fees}}
+{{data.cash_flow}}
+{{data.operational_cash}} -->
 

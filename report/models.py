@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.files.storage import DefaultStorage
 
-
-#populate models with data from the forms.py you fucking dumb idiot
 # Create your models here.
 
 class BasicInformation(models.Model):
@@ -68,47 +66,36 @@ class PersonalFinancialStatement(models.Model):
 
 class FinancialFlashReport(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    file = models.FileField(storage=DefaultStorage(), unique=False)
     company_name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     owner_name = models.CharField(max_length=200)
-    years_in_current_business = models.IntegerField()
+    years_in_current_business = models.IntegerField(null=True)
     current_business_structure = models.CharField(max_length=200)
+    date_of_statement = models.CharField(max_length=200)
+    marketable_securities = models.IntegerField(null=True)
+    cash_from_sales = models.IntegerField(null=True)
+    gross_cash_income = models.IntegerField(null=True)
+    cash_operating_expenses = models.IntegerField(null=True)
+    other_income = models.IntegerField(null=True)
+    net_cash_after_operations = models.IntegerField(null=True)
+    m1_net_deductions = models.IntegerField(null=True)
+    m2_net_deductions = models.IntegerField(null=True)
+    ending_cash_position = models.IntegerField(null=True)
+    depreciation = models.IntegerField(null=True)
+    amortization = models.IntegerField(null=True)
+    interest = models.IntegerField(null=True)
+    nre = models.IntegerField(null=True)
+    owners_management_fees = models.IntegerField(null=True)
+    cash_flow = models.IntegerField(null=True)
+    operational_cash = models.IntegerField(null=True)
+    available_cash = models.IntegerField(null=True)
+    new_debt_services = models.IntegerField(null=True)
+    surplus = models.IntegerField(null=True)
+    coverage_ratio = models.IntegerField(null=True)
+    financial_footnotes = models.CharField(max_length=10000)
+    business_id = models.IntegerField(null=True)
     
-# class TaxYears(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-#     date_of_statement = models.CharField(max_length=200)
-#     marketable_securities = models.IntegerField()
-#     cash_from_sales = models.IntegerField()
-#     gross_cash_income = models.IntegerField()
-#     cash_operating_expenses = models.IntegerField()
-#     other_income = models.IntegerField()
-#     net_cash_after_operations = models.IntegerField()
-#     m1_net_deductions = models.IntegerField()
-#     m2_net_deductions = models.IntegerField()
-#     ending_cash_position = models.IntegerField()
-#     depreciation = models.IntegerField()
-#     amortization = models.IntegerField()
-#     interest = models.IntegerField()
-#     nre = models.IntegerField()
-#     owners_management_fees = models.IntegerField()
-#     cash_flow = models.IntegerField()
-#     operational_cash = models.IntegerField()
-#     available_cash = models.IntegerField()
-#     new_debt_services = models.IntegerField()
-#     surplus = models.IntegerField()
-#     coverage_ratio = models.IntegerField()
-#     financial_footnotes = models.IntegerField()
 
-class Uploads(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    file = models.FileField(storage=DefaultStorage())
-
-# class financial_statement_pdfs(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-#     file = models.FileField(storage=DefaultStorage())
-
-class financial_flash_report_pdfs(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    file = models.FileField(storage=DefaultStorage())
 
     

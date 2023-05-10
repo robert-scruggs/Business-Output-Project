@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 
 from report import financialStatements
+from report import financialFlashReports
 from .forms import BasicInformationForm, OperatingYearsForm1, OperatingYearsForm2, OperatingYearsForm3
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login, logout
@@ -8,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 from .models import * 
 from django.core.files.base import ContentFile
 import io
-import time
+from django.http import JsonResponse
+import json
 
 
 
@@ -143,23 +145,6 @@ def yearThree(request):
 
     return render(request, 'fourthPage.html', {"form" : form})
 
-# @login_required
-# def taxYears(request):
-#     form = TaxYearsForm()
-
-    
-#     if request.method == "POST":
-#         form = TaxYearsForm(request.POST)
-#         if form.is_valid():
-#             my_object = form.save(commit=False)
-#             my_object.user = request.user
-#             my_object.save()
-#             form.user = request.user.id
-#             form.save()
-#         return redirect("/success/")
-
-#     return render(request, 'fourthPage.html', {"form" : form})
-
 def loginUser(request):
     if request.method == 'POST':
         username = request.POST.get("username")
@@ -184,29 +169,66 @@ def register(request):
     form = UserCreationForm()
     context = {'form':form}
     return render(request, "register.html", context)
-    
+
+@login_required    
 def logoutUser(request):
     logout(request)
     return redirect("/login")
 
 incomeTaxReturnFilesList = []
+businessID = [0]
+@login_required
 def incomeTaxReturnFiles(request):
+    user = request.user
+    ffr = FinancialFlashReport.objects.filter(user_id=user)
+    # max_id = ffr.latest('business_id').business_id
+
     if request.method == 'POST':
-        uploaded_file = request.FILES["file"]
-        name = request.POST.get('name')
-        incomeTaxReturnFilesList.append(uploaded_file)
-        for file in incomeTaxReturnFilesList:
+        # data = json.loads(request.body)
+        uploaded_files = request.FILES.getlist("files")
+        # nre_list = data.get('nreList')
+        # management_fees_list = data.get('managementFeesList')
+
+        # for x in nre_list:
+        #     print(x)
+        # for x in management_fees_list:
+        #     print
+            
+
+        businessName = request.POST.get('businessName')
+        address = request.POST.get('address')
+        owners = request.POST.get('owners')
+        yearsInBusiness = request.POST.get('yearsInBusiness')
+        
+        for file in uploaded_files:
+            incomeTaxReturnFilesList.append(file)
+            file_contents = io.BytesIO(file.read())
+            new_file = FinancialFlashReport(user=user,business_id=businessID[0])
+            new_file.file.save(file.name, ContentFile(file_contents.getvalue()))
+            new_file.save()
             print(file)
         
-        file_contents = io.BytesIO(uploaded_file.read())
-        user = request.user
-        new_file = financial_flash_report_pdfs(user=user)
-        new_file.file.save(file.name, ContentFile(file_contents.getvalue()))
-        new_file.save()
+        businessID[0] = businessID[0] + 1
+    
+        # for id in range(max_id + 1):
+        #     files = ffr.filter(business_id=id)
+
+        #     for currUser in files:
+        #         currFile = currUser.file
+        #         currUser.company_name = businessName
+        #         currUser.address = address
+        #         currUser.owner_name = owners
+        #         currUser.years_in_current_business = yearsInBusiness
         
-    return render(request, 'uploadIncomeTaxReturns.html')
+        
+    context = {
+        'ffr':ffr
+    }
+
+    return render(request, 'uploadIncomeTaxReturns.html',context)
 
 personalFinancialStatementFilesList = []
+@login_required
 def personalFinancialStatementFiles(request):
     user = request.user
     pfs = PersonalFinancialStatement.objects.filter(user_id=user) 
@@ -250,99 +272,44 @@ def personalFinancialStatementFiles(request):
         'pfs':pfs
     }
     return render(request, 'uploadFinancialStatements.html', context)
+ 
 
-def report(request):
-
-    context = {'title': 'Business Financing Review',
-               'project' : 'Corner Bakery Cafe Franchise Locations (3)',
-               'operating_company': 'Cutter Highlands Ranch LLC',
-               'parent_company': 'Something IDK',
-               'business_owners': 'Gerald and Whitney',
-               'primary_business_address': 'ya mama lane',
-               'locations': 'some locations around the world',
-               'business_financing_needs_summary': '$50000000',
-               'proposed_loan_needs': '$63435415413',
-               'package_includes': 'something about what is inside the package',
-               'year_one_locations': '1',
-               'year_two_locations': '2',
-               'year_three_locations': '3',
-               'state': 'Colorado',
-                'year_one_sales': '2281',
-                'year_two_sales': '4813',
-                'year_three_sales': '5053',
-                'year_one_food_costs': '570',
-                'year_two_food_costs': '1203',
-                'year_three_food_costs': '1263',
-                'year_one_labor_costs': '593',
-                'year_two_labor_costs': '1251',
-                'year_three_labor_costs': '1314',
-                'year_one_total_costs': '1163',
-                'year_two_total_costs': '2455',
-                'year_three_total_costs': '2577',
-                'year_one_ag_costs': '80',
-                'year_two_ag_costs': '168',
-                'year_three_ag_costs': '177',
-                'year_one_rsm_costs': '114',
-                'year_two_rsm_costs': '241',
-                'year_three_rsm_costs': '253',
-                'year_one_facilities_costs': '342',
-                'year_two_facilities_costs': '722',
-                'year_three_facilities_costs': '758',
-                'year_one_total_other_operative_exp': '536',
-                'year_two_total_other_operative_exp': '1131',
-                'year_three_total_other_operative_exp': '1188',
-                'year_one_total_operative_exp': '1699',
-                'year_two_total_operative_exp': '3586',
-                'year_three_total_operative_exp': '3765',
-                'year_one_income_before_fix_expense': '582',
-                'year_two_income_before_fix_expense': '1227',
-                'year_three_income_before_fix_expense': '1289',
-                'year_one_property_tax': '16',
-                'year_two_property_tax': '26',
-                'year_three_property_tax': '27',
-                'year_one_insurance': '11',
-                'year_two_insurance': '24',
-                'year_three_insurance': '25',
-                'year_one_reserve': '342',
-                'year_two_reserve': '722',
-                'year_three_reserve': '810',
-                'year_one_net_income_before_interest_tax': '212',
-                'year_two_net_income_before_interest_tax': '455',
-                'year_three_net_income_before_interest_tax': '478',
-                'owner': 'John Cutter',
-                'cash': '25,000',
-                'marketable_securities': '2,100,000',
-                'total_liquid_assets': '2,125,000',
-                'real_estate': '0',
-                'primary_residence1': '900,000',
-                'total_real_estate': '900,000',
-                'other_assets': '0',
-                'ira_401k': '0',
-                'life_insurance': '0',
-                'notes_receivable': '0',
-                'business_values': '3,500,000',
-                'automobiles': '50,000',
-                'personal_property': '60,000',
-                'total_other_assets': '3,610,000',
-                'total_assets': '6,635,000',
-                'primary_residence2': '339,000',
-                'total_re_mortgage': '339,000',
-                'accounts_payable': '0',
-                'notes_payable': '0',
-                'installment_accounts': '94,000',
-                'total_liabilites': '433.000',
-                'net_worth': '6,202,000',
-                'overall_total': '6,635,000',
-
-                
-
-                }
-    
-    
-    
-    return render(request, 'report.html', context)
-
+@login_required
 def finalReport(request):
+    #resets businessID back to zero since it will be used globally, yes i know its bad code but i must continue i fear
+    businessID[0] = 0
+    user = request.user
+    ffr = FinancialFlashReport.objects.filter(user_id=user)
+    max_id = ffr.latest('business_id').business_id
+
+    #these names are confusing as hell but keep up please
+    # for id in range(max_id + 1):
+    #     files = ffr.filter(business_id=id)
+
+    #     for currUser in files:
+    #         currFile = currUser.file
+    #         currUser.cash_from_sales = financialFlashReports.getCashFromSales(currFile)
+    #         currUser.gross_cash_income = financialFlashReports.getGrossCashIncome(currFile)
+    #         currUser.cash_operating_expenses = financialFlashReports.getCashOperatingExpenses(currFile)
+    #         currUser.other_income = financialFlashReports.getOtherIncomeExpenses(currFile)
+    #         currUser.net_cash_after_operations = financialFlashReports.getNetCashAfterOperations(currFile)
+    #         currUser.m1_net_deductions = financialFlashReports.getM1Deductions(currFile)
+    #         currUser.m2_net_deductions = financialFlashReports.getM2Deductions(currFile)
+    #         currUser.ending_cash_position = financialFlashReports.getEndingCashPosition(currFile)
+    #         currUser.depreciation = financialFlashReports.getDepreciation(currFile)
+    #         currUser.amortization = financialFlashReports.getAmortization(currFile)
+    #         currUser.interest = financialFlashReports.getInterest(currFile)
+    #         currUser.nre = 0
+    #         currUser.owners_management_fees = 0
+    #         currUser.cash_flow = financialFlashReports.getCashFlow(currFile)
+    #         currUser.operational_cash = financialFlashReports.getCashFlow(currFile)
+    #         currUser.available_cash = financialFlashReports.getCashFlow(currFile)
+    #         currUser.new_debt_services = 0
+    #         currUser.surplus = financialFlashReports.getCashFlow(currFile)
+    #         currUser.coverage_ratio = 0
+    #         currUser.financial_footnotes = "empty"
+    #         currUser.save()
+
     bi = BasicInformation.objects.all()
     oy1 = OperatingYears.objects.all()
     pfs = PersonalFinancialStatement.objects.all()
@@ -353,7 +320,7 @@ def finalReport(request):
         'oy1': oy1,
         'pfs': pfs,
         'ffr': ffr,
-        'state': oy1[0].state
+        'state': oy1[0].state,
     }
     
     return render(request, 'practiceReport.html', context)
