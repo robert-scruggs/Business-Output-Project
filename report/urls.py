@@ -15,18 +15,18 @@ from . import views
 
 urlpatterns = [
     path('', views.register),
-    path('basicInformation/', views.basicInformation),
-    path('yearOne/', views.yearOne),
-    path('yearTwo/', views.yearTwo),
-    path('yearThree/', views.yearThree),
-    path('taxyears/', views.taxYears),
-    path('success/', views.success),
+    path('basicInformation/', views.basicInformation, name='basicInformation'),
+    path('yearOne/', views.yearOne, name='yearOne'),
+    path('yearTwo/', views.yearTwo, name='yearTwo'),
+    path('yearThree/', views.yearThree, name='yearThree'),
+    # path('taxyears/', views.taxYears),
     path('register/', views.register, name='register'),
     path('login/', views.loginUser, name='login'),
     path('logout/', views.logoutUser, name='logout'),
-    path('files/', views.files),
+    path('incomeTaxReturnFiles/', views.incomeTaxReturnFiles, name='incomeTaxReturnFiles'),
+    path('personalFinancialStatementFiles/', views.personalFinancialStatementFiles, name='personalFinancialStatementFiles'),
     path('report/', views.report),
-    path('finalReport/', views.finalReport),
+    path('finalReport/', views.finalReport, name='finalReport'),
 ]
 
 

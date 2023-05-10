@@ -5,6 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report</title>
+    <style>
+        table {
+          border-collapse: collapse;
+          border: none;
+        }
+        td, th {
+          border: none;
+        }
+      </style>
 </head>
 <body>
 
@@ -212,10 +221,97 @@
         </table>
     </div>
 
+    
+    <div class="personal-financial-statement" style="display: flex; flex-direction: row; justify-content: space-around; border: 1px solid black;">
+        <div class="labels" style="display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
+            <h4 style="color: red;">Personal Financial Statements</h4>
+            <h4 style="color: red;">Assets</h4>
+            <h4>Cash</h4>
+            <h4>Marketable Securities</h4>
+            <h4 style="color: red;">Total Liquid Assets</h4>
+            <h4>Real Estate</h4>
+            <h4>Primary Residence</h4>
+            <h4 style="color: red;">Total Real Estate</h4>
+            <h4>Other Assets</h4>
+            <h4>IRA/401K</h4>
+            <h4>Life Insurance</h4>
+            <h4>Notes Receivable</h4>
+            <h4>Business Values</h4>
+            <h4>Automobiles</h4>
+            <h4>Personal Property</h4>
+            <h4 style="color: red;">Total Other Assets</h4>
+            <h4 style="color: red;">Total Assets</h4>
+            <h4 style="color: red;">Liabilities</h4>
+            <h4>Primary Residence</h4>
+            <h4 style="color: red;">Total RE Mortgage</h4>
+            <h4>Accounts Payable</h4>
+            <h4>Notes Payable</h4>
+            <h4>Installment Accounts</h4>
+            <h4 style="color: red;">Total Liabilities</h4>
+            <h4 style="color: red;" >Net Worth</h4>
+            <h4 style="color: red;">Total</h4>
 
-    <div class="personal-financial-statement">
-        <h1 style="text-align: center;">Personal Financial Statements</h1>
-        <table>
+        </div>
+        {% for data in pfs%}
+        <div class="content" style=" display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
+            <h4>Robert </h4>
+            <h4 style="visibility: hidden;">{{data.cash}}</h4>
+            <h4>{{data.cash}}</h4>
+            <h4>{{data.marketable_securities}}</h4>
+            <h4>{{data.total_liquid_assets}}</h4>
+            <h4 style="visibility: hidden;">{{data.cash}}</h4>
+            <h4>{{data.primary_residence}}</h4>
+            <h4>{{data.primary_residence}}</h4>
+            <h4 style="visibility: hidden;">{{data.cash}}</h4>
+            <h4>{{data.ira_401k}}</h4>
+            <h4>{{data.life_insurance}}</h4>
+            <h4>{{data.notes_receivable}}</h4>
+            <h4>{{data.business_values}}</h4>
+            <h4>{{data.automobiles}}</h4>
+            <h4>{{data.personal_property}}</h4>
+            <h4>{{data.total_other_assets}}</h4>
+            <h4>{{data.total_assets}}</h4>
+            <h4 style="visibility: hidden;">{{data.cash}}</h4>
+            <h4>{{data.total_re_mortgage}}</h4>
+            <h4>{{data.total_re_mortgage}}</h4>
+            <h4>{{data.accounts_payable}}</h4>
+            <h4>{{data.notes_payable}}</h4>
+            <h4>{{data.installment_accounts}}</h4>
+            <h4>{{data.total_liabilities}}</h4>
+            <h4>{{data.net_worth}}</h4>
+            <h4>{{data.grand_total}}</h4>
+        </div>
+        {%endfor%}
+        
+        <!-- <h1 style="text-align: center;">Personal Financial Statements</h1>
+        <table id="pfs" style="width:100%;">
+            {%for data in pfs%}
+            <tr>
+                <th></th>
+                <th>Robert Scruggs</th>
+            </tr>
+            <tr>
+                {% if forloop.first %}
+                <td><b>Assets</b></td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td>Cash</td>
+                <td>{{data.cash}}</td>
+              </tr>
+              <tr>
+                <td>Marketable Securities</td>
+                <td>{{data.marketable_securities}}</td>
+              </tr>
+              <tr>
+                <td>Total Liquid Assets</td>
+                <td>{{data.total_liquid_assets}}</td>
+              </tr>
+              {%endfor%}
+        </table> -->
+
+
+        <!-- <table style="display: flex; flex-direction: row;">
             <tr>
                 <th>Owner 1: {{owner}} (Monthly Pmts)</th>
             </tr>
@@ -342,7 +438,133 @@
                 <th>Total</th>
                 <th>{{overall_total}}</th>
             </tr>
-        </table>
+            <tr>
+                <th>Owner 1: {{owner}} (Monthly Pmts)</th>
+            </tr>
+            <tr>
+                <th><h2>Assets</h4></th>
+            </tr>
+            <tr>
+                <th>Cash</th>
+                <th>{{cash}}</th>
+            </tr>
+            <tr>
+                <th>Marketable Securities</th>
+                <th>{{marketable_securities}}</th>
+            </tr>
+            <tr>
+                <th>Total Liquid Assets</th>
+                <th>{{total_liquid_assets}}</th>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <th>Real Estate</th>
+                <th>{{real_estate}}</th>
+            </tr>
+            <tr>
+                <th>Primary Residence</th>
+                <th>{{primary_residence1}}</th>
+            </tr>
+            <tr>
+                <th>Total Real Estate</th>
+                <th>{{total_real_estate}}</th>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <th>Other Assets</th>
+                <th>{{other_assets}}</th>
+            </tr>
+            <tr>
+                <th>IRA/401K</th>
+                <th>{{ira_401k}}</th>
+            </tr>
+            <tr>
+                <th>Life Insurance</th>
+                <th>{{life_insurance}}</th>
+            </tr>
+            <tr>
+                <th>Notes Receivable</th>
+                <th>{{notes_receivable}}</th>
+            </tr>
+            <tr>
+                <th>Business Values</th>
+                <th>{{business_values}}</th>
+            </tr>
+            <tr>
+                <th>Automobiles</th>
+                <th>{{automobiles}}</th>
+            </tr>
+            <tr>
+                <th>Personal Property</th>
+                <th>{{personal_property}}</th>
+            </tr>
+            <tr>
+                <th>Total Other Assets</th>
+                <th>{{total_other_assets}}</th>
+            </tr>
+            <tr style="background-color: skyblue;">
+                <th>Total Assets</th>
+                <th>{{total_assets}}</th>
+            </tr>
+
+            <tr>
+                <th><h2>Liabilites</h4></th>
+            </tr>
+            <tr>
+                <th>Primary Residence</th>
+                <th>{{primary_residence2}}</th>
+            </tr>
+            <tr>
+                <th>Total RE Mortgage</th>
+                <th>{{total_re_mortgage}}</th>
+            </tr>
+            <tr>
+                <th>Accounts Payable</th>
+                <th>{{accounts_payable}}</th>
+            </tr>
+            <tr>
+                <th>Notes Payable</th>
+                <th>{{notes_payable}}</th>
+            </tr>
+            <tr>
+                <th>Installment Accounts</th>
+                <th>{{installment_accounts}}</th>
+            </tr>
+            <tr style="background-color: lightsalmon;">
+                <th>Total Liabilites</th>
+                <th>{{total_liabilites}}</th>
+            </tr>
+            <tr style="background-color: darksalmon;">
+                <th>Net Worth</th>
+                <th>{{net_worth}}</th>
+            </tr>
+            <tr style="background-color: skyblue;">
+                <th>Total</th>
+                <th>{{overall_total}}</th>
+            </tr>
+        </table> -->
     </div>
 
 

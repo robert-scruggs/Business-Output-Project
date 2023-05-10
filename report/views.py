@@ -1,9 +1,15 @@
 from django.shortcuts import render, redirect
-from .forms import BasicInformationForm, OperatingYearsForm1, OperatingYearsForm2, OperatingYearsForm3, TaxYearsForm
+
+from report import financialStatements
+from .forms import BasicInformationForm, OperatingYearsForm1, OperatingYearsForm2, OperatingYearsForm3
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.decorators import login_required
 from .models import * 
+from django.core.files.base import ContentFile
+import io
+import time
+
 
 
 # Create your views here.
@@ -133,30 +139,26 @@ def yearThree(request):
             #saves extra data to database
             tcogsDB.save()
             print(total_cost_of_goods_sold_value, total_other_operative_expense_value, total_operative_expense_value, income_before_fix_expense_value,total_fix_expense_value,net_income_value)
-        return redirect("/files/")
+        return redirect("/personalFinancialStatementFiles/")
 
     return render(request, 'fourthPage.html', {"form" : form})
 
-@login_required
-def taxYears(request):
-    form = TaxYearsForm()
+# @login_required
+# def taxYears(request):
+#     form = TaxYearsForm()
 
     
-    if request.method == "POST":
-        form = TaxYearsForm(request.POST)
-        if form.is_valid():
-            my_object = form.save(commit=False)
-            my_object.user = request.user
-            my_object.save()
-            form.user = request.user.id
-            form.save()
-        return redirect("/success/")
+#     if request.method == "POST":
+#         form = TaxYearsForm(request.POST)
+#         if form.is_valid():
+#             my_object = form.save(commit=False)
+#             my_object.user = request.user
+#             my_object.save()
+#             form.user = request.user.id
+#             form.save()
+#         return redirect("/success/")
 
-    return render(request, 'fourthPage.html', {"form" : form})
-
-@login_required
-def success(request):
-    return render(request,'success.html')
+#     return render(request, 'fourthPage.html', {"form" : form})
 
 def loginUser(request):
     if request.method == 'POST':
@@ -171,7 +173,6 @@ def loginUser(request):
             
     # context = {'form':form}
     return render(request, "login.html")
-
 
 def register(request):
     if request.method == "POST":
@@ -188,17 +189,67 @@ def logoutUser(request):
     logout(request)
     return redirect("/login")
 
-filesList = []
-def files(request):
+incomeTaxReturnFilesList = []
+def incomeTaxReturnFiles(request):
     if request.method == 'POST':
-        uploaded_file = request.FILES['file']
-        filesList.append(uploaded_file)
-        print(filesList)
+        uploaded_file = request.FILES["file"]
+        name = request.POST.get('name')
+        incomeTaxReturnFilesList.append(uploaded_file)
+        for file in incomeTaxReturnFilesList:
+            print(file)
         
-        #return render(request, 'success.html')
-    return render(request, 'files.html')
+        file_contents = io.BytesIO(uploaded_file.read())
+        user = request.user
+        new_file = financial_flash_report_pdfs(user=user)
+        new_file.file.save(file.name, ContentFile(file_contents.getvalue()))
+        new_file.save()
+        
+    return render(request, 'uploadIncomeTaxReturns.html')
 
+personalFinancialStatementFilesList = []
+def personalFinancialStatementFiles(request):
+    user = request.user
+    pfs = PersonalFinancialStatement.objects.filter(user_id=user) 
+    
+    if request.method == 'POST':
+        uploaded_files = request.FILES.getlist('files')
+        for file in uploaded_files:
+            personalFinancialStatementFilesList.append(file)
+            file_contents = io.BytesIO(file.read())
+            new_file = PersonalFinancialStatement(user=user)
+            new_file.file.save(file.name, ContentFile(file_contents.getvalue()))
+            new_file.save()
 
+        for person in pfs:
+            file = person.file
+            person.cash_on_hand = financialStatements.getCashOnHand(file)
+            person.savings_account = financialStatements.getSavingsAccount(file)
+            person.cash = financialStatements.getCash(file)
+            person.marketable_securities = financialStatements.getMarketableSecurities(file)
+            person.total_liquid_assets = financialStatements.getTotalLiquidAssets(file)
+            person.primary_residence = financialStatements.getPrimaryResidence(file)
+            person.ira_401k = financialStatements.getIRA(file)
+            person.life_insurance = financialStatements.getLifeInsurance(file)
+            person.notes_receivable = financialStatements.getNotesReceivable(file)
+            person.business_values = financialStatements.getBusinessValues(file)
+            person.automobiles = financialStatements.getAutomobiles(file)
+            person.personal_property = financialStatements.getPersonalProperty(file)
+            person.total_other_assets = financialStatements.getTotalOtherAssets(file)
+            person.total_assets = financialStatements.getTotalAssets(file)
+            person.total_re_mortgage = financialStatements.getTotalREMortgage(file)
+            person.accounts_payable = financialStatements.getAccountsPayable(file)
+            person.notes_payable = financialStatements.getNotesPayable(file)
+            person.installment_accounts_auto = financialStatements.getInstallmentAccountsAuto(file)
+            person.installment_accounts_other = financialStatements.getInstallmentAccountsOther(file)
+            person.installment_accounts = financialStatements.getInstallmentAccounts(file)
+            person.total_liabilities = financialStatements.getTotalLiabilities(file)
+            person.net_worth = financialStatements.getNetWorth(file)
+            person.grand_total = financialStatements.getAbsoluteTotal(file)
+            person.save()
+    context = {
+        'pfs':pfs
+    }
+    return render(request, 'uploadFinancialStatements.html', context)
 
 def report(request):
 
@@ -294,16 +345,12 @@ def report(request):
 def finalReport(request):
     bi = BasicInformation.objects.all()
     oy1 = OperatingYears.objects.all()
-    ty = TaxYears.objects.all()
     pfs = PersonalFinancialStatement.objects.all()
     ffr = FinancialFlashReport.objects.all()
-    u = Uploads.objects.all()
-
 
     context = {
         'bi': bi,
         'oy1': oy1,
-        'ty': ty,
         'pfs': pfs,
         'ffr': ffr,
         'state': oy1[0].state

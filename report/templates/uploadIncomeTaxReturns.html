@@ -1,0 +1,17 @@
+{% block content %}
+  <h1>Please upload Income Tax Returns</h1>
+  <form method="post" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <input type="file" name="file">
+    <br>
+    <br>
+    <br>
+    <button type="submit">Upload</button>
+  </form>
+  <br>
+  <br>
+  <a href="{% url 'personalFinancialStatementFiles' %}">Personal Financial Statment</a>
+  <br>
+  <br>
+  <a href="{% url 'finalReport' %}">Final Report</a>
+{% endblock %}
