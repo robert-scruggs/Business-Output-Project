@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .financialStatements import *
+from report import financialStatements
 from .financialFlashReports import *
 from .forms import BasicInformationForm, OperatingYearsForm1, OperatingYearsForm2, OperatingYearsForm3
 from django.contrib.auth.forms import UserCreationForm
