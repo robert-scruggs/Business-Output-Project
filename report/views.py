@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect
-
-import django
-from report.financialStatements import *
-from report.financialFlashReports import *
+from .financialStatements import *
+from .financialFlashReports import *
 from .forms import BasicInformationForm, OperatingYearsForm1, OperatingYearsForm2, OperatingYearsForm3
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login, logout
@@ -10,12 +8,10 @@ from django.contrib.auth.decorators import login_required
 from .models import * 
 from django.core.files.base import ContentFile
 import io
-from django.http import JsonResponse
-import json
 from django.http import HttpResponse
 from itertools import groupby
 from operator import attrgetter
-from django.db.models import Sum
+
 
 
 
