@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from report import financialStatements
+from .financialStatements import *
 from .financialFlashReports import *
 from .forms import BasicInformationForm, OperatingYearsForm1, OperatingYearsForm2, OperatingYearsForm3
 from django.contrib.auth.forms import UserCreationForm
@@ -248,29 +248,29 @@ def personalFinancialStatementFiles(request):
 
         for person in pfs:
             file = person.file
-            person.cash_on_hand = financialStatements.getCashOnHand(file)
-            person.savings_account = financialStatements.getSavingsAccount(file)
-            person.cash = financialStatements.getCash(file)
-            person.marketable_securities = financialStatements.getMarketableSecurities(file)
-            person.total_liquid_assets = financialStatements.getTotalLiquidAssets(file)
-            person.primary_residence = financialStatements.getPrimaryResidence(file)
-            person.ira_401k = financialStatements.getIRA(file)
-            person.life_insurance = financialStatements.getLifeInsurance(file)
-            person.notes_receivable = financialStatements.getNotesReceivable(file)
-            person.business_values = financialStatements.getBusinessValues(file)
-            person.automobiles = financialStatements.getAutomobiles(file)
-            person.personal_property = financialStatements.getPersonalProperty(file)
-            person.total_other_assets = financialStatements.getTotalOtherAssets(file)
-            person.total_assets = financialStatements.getTotalAssets(file)
-            person.total_re_mortgage = financialStatements.getTotalREMortgage(file)
-            person.accounts_payable = financialStatements.getAccountsPayable(file)
-            person.notes_payable = financialStatements.getNotesPayable(file)
-            person.installment_accounts_auto = financialStatements.getInstallmentAccountsAuto(file)
-            person.installment_accounts_other = financialStatements.getInstallmentAccountsOther(file)
-            person.installment_accounts = financialStatements.getInstallmentAccounts(file)
-            person.total_liabilities = financialStatements.getTotalLiabilities(file)
-            person.net_worth = financialStatements.getNetWorth(file)
-            person.grand_total = financialStatements.getAbsoluteTotal(file)
+            person.cash_on_hand = getCashOnHand(file)
+            person.savings_account = getSavingsAccount(file)
+            person.cash = getCash(file)
+            person.marketable_securities = getMarketableSecurities(file)
+            person.total_liquid_assets = getTotalLiquidAssets(file)
+            person.primary_residence = getPrimaryResidence(file)
+            person.ira_401k = getIRA(file)
+            person.life_insurance = getLifeInsurance(file)
+            person.notes_receivable = getNotesReceivable(file)
+            person.business_values = getBusinessValues(file)
+            person.automobiles = getAutomobiles(file)
+            person.personal_property = getPersonalProperty(file)
+            person.total_other_assets = getTotalOtherAssets(file)
+            person.total_assets = getTotalAssets(file)
+            person.total_re_mortgage = getTotalREMortgage(file)
+            person.accounts_payable = getAccountsPayable(file)
+            person.notes_payable = getNotesPayable(file)
+            person.installment_accounts_auto = getInstallmentAccountsAuto(file)
+            person.installment_accounts_other = getInstallmentAccountsOther(file)
+            person.installment_accounts = getInstallmentAccounts(file)
+            person.total_liabilities = getTotalLiabilities(file)
+            person.net_worth = getNetWorth(file)
+            person.grand_total = getAbsoluteTotal(file)
             person.save()
     context = {
         'pfs':pfs
