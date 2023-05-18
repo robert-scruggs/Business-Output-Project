@@ -12,15 +12,16 @@ class BasicInformationForm(ModelForm):
     operating_company = forms.CharField(max_length=255, label="Operating Company")
     parent_company = forms.CharField(max_length=255, label="Parent Company")
     business_owners = forms.CharField(max_length=255, label="Business Owners", help_text="(Separate business owners with commas)")
+    locations = forms.CharField(max_length=255, label="Locations", help_text="(Separate locations with commas)")
     primary_business_address = forms.CharField(max_length=255, label="Primary Business Address")
     proposed_loan_needs = forms.CharField(max_length=255, label="Proposed Loan Needs:")
-    list_of_report_outcomes = forms.CharField(max_length=2000, label="List Of Report Outcomes", help_text="(Separate items with commas)", widget=forms.Textarea(attrs={
+    list_of_report_outcomes = forms.CharField(max_length=2000, label="Package Includes:", help_text="(Separate items with commas)", widget=forms.Textarea(attrs={
         'style': 'vertical-align: top',
         "rows":5, "cols":20
     }))
     class Meta:
         model = BasicInformation
-        fields = ('finance_review','operating_company', 'parent_company', 'business_owners', 'primary_business_address','proposed_loan_needs','list_of_report_outcomes')
+        fields = ('finance_review','operating_company', 'parent_company', 'business_owners', 'locations', 'primary_business_address','proposed_loan_needs','list_of_report_outcomes')
         
 
 class OperatingYearsForm1(ModelForm):

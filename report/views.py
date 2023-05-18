@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 
+import django
 from report import financialStatements
 from report import financialFlashReports
 from .forms import BasicInformationForm, OperatingYearsForm1, OperatingYearsForm2, OperatingYearsForm3
@@ -11,6 +12,11 @@ from django.core.files.base import ContentFile
 import io
 from django.http import JsonResponse
 import json
+from django.http import HttpResponse
+from itertools import groupby
+from operator import attrgetter
+from django.db.models import Sum
+
 
 
 
@@ -163,9 +169,13 @@ def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(request, username=username, password=password)
             form.save()
-            return redirect("/login")
-    
+            if user is not None:
+                login(request, user)
+                return redirect("/basicInformation")
     form = UserCreationForm()
     context = {'form':form}
     return render(request, "register.html", context)
@@ -181,51 +191,49 @@ businessID = [0]
 def incomeTaxReturnFiles(request):
     user = request.user
     ffr = FinancialFlashReport.objects.filter(user_id=user)
-    # max_id = ffr.latest('business_id').business_id
+    businessID[0] = businessID[0] + 1
 
     if request.method == 'POST':
-        # data = json.loads(request.body)
-        uploaded_files = request.FILES.getlist("files")
-        # nre_list = data.get('nreList')
-        # management_fees_list = data.get('managementFeesList')
-
-        # for x in nre_list:
-        #     print(x)
-        # for x in management_fees_list:
-        #     print
-            
-
+        uploaded_files = request.FILES.getlist('files')
         businessName = request.POST.get('businessName')
         address = request.POST.get('address')
         owners = request.POST.get('owners')
         yearsInBusiness = request.POST.get('yearsInBusiness')
-        
-        for file in uploaded_files:
-            incomeTaxReturnFilesList.append(file)
+        locations = request.POST.get('locations')
+        nre = request.POST.getlist('nre')
+        ownersManagementFees = request.POST.getlist('ownersManagementFees')
+
+        print(uploaded_files)
+
+        for file, nre ,ownersFee in zip(uploaded_files, nre, ownersManagementFees):
+            incomeTaxReturnFilesList.append(uploaded_files)
             file_contents = io.BytesIO(file.read())
             new_file = FinancialFlashReport(user=user,business_id=businessID[0])
             new_file.file.save(file.name, ContentFile(file_contents.getvalue()))
+            new_file.company_name = businessName
+            new_file.address = address
+            new_file.owner_name = owners
+            new_file.years_in_current_business = yearsInBusiness
+            new_file.current_business_structure = locations
+            new_file.nre = nre
+            new_file.owners_management_fees = ownersFee
             new_file.save()
             print(file)
-        
-        businessID[0] = businessID[0] + 1
-    
-        # for id in range(max_id + 1):
-        #     files = ffr.filter(business_id=id)
-
-        #     for currUser in files:
-        #         currFile = currUser.file
-        #         currUser.company_name = businessName
-        #         currUser.address = address
-        #         currUser.owner_name = owners
-        #         currUser.years_in_current_business = yearsInBusiness
-        
         
     context = {
         'ffr':ffr
     }
 
     return render(request, 'uploadIncomeTaxReturns.html',context)
+
+def restart(request):
+    FinancialFlashReport.objects.all(user_id=request.user).delete()
+    PersonalFinancialStatement.objects.all(user_id=request.user).delete()
+    OperatingYears.objects.all(user_id=request.user).delete()
+    BasicInformation.objects.all(user_id=request.user).delete()
+
+    return HttpResponse("all deleted")
+
 
 personalFinancialStatementFilesList = []
 @login_required
@@ -279,12 +287,18 @@ def finalReport(request):
     #resets businessID back to zero since it will be used globally, yes i know its bad code but i must continue i fear
     businessID[0] = 0
     user = request.user
-    ffr = FinancialFlashReport.objects.filter(user_id=user)
-    max_id = ffr.latest('business_id').business_id
-
-    #these names are confusing as hell but keep up please
+    finalReport = FinancialFlashReport.objects.filter(user_id=user)
+    bi = BasicInformation.objects.filter(user_id=user)
+    oy1 = OperatingYears.objects.filter(user_id=user)
+    pfs = PersonalFinancialStatement.objects.filter(user_id=user)
+    items = FinancialFlashReport.objects.filter(user_id=user).filter(consolidated=0).order_by('business_id')
+    max_id = finalReport.latest('business_id').business_id
+    grouped_items = groupby(items, key=attrgetter('business_id'))
+    ffr = [{'business_id': key, 'items': list(group)} for key, group in grouped_items]
+    
+    # #these names are confusing as hell but keep up please
     # for id in range(max_id + 1):
-    #     files = ffr.filter(business_id=id)
+    #     files = finalReport.filter(business_id=id)
 
     #     for currUser in files:
     #         currFile = currUser.file
@@ -299,8 +313,6 @@ def finalReport(request):
     #         currUser.depreciation = financialFlashReports.getDepreciation(currFile)
     #         currUser.amortization = financialFlashReports.getAmortization(currFile)
     #         currUser.interest = financialFlashReports.getInterest(currFile)
-    #         currUser.nre = 0
-    #         currUser.owners_management_fees = 0
     #         currUser.cash_flow = financialFlashReports.getCashFlow(currFile)
     #         currUser.operational_cash = financialFlashReports.getCashFlow(currFile)
     #         currUser.available_cash = financialFlashReports.getCashFlow(currFile)
@@ -308,19 +320,96 @@ def finalReport(request):
     #         currUser.surplus = financialFlashReports.getCashFlow(currFile)
     #         currUser.coverage_ratio = 0
     #         currUser.financial_footnotes = "empty"
+    #         currUser.date_of_statement = financialFlashReports.getStatementDate(currFile)
+    #         currUser.consolidated = 0
     #         currUser.save()
+    
+    # #consolidated
+    first_value = FinancialFlashReport.objects.filter(user_id=user).values_list('business_id', flat=True).first()
+    if first_value is not None:
+        queryset = FinancialFlashReport.objects.filter(business_id=first_value)
+        for x in queryset:
+            secondSet = FinancialFlashReport.objects.filter(date_of_statement=x.date_of_statement)
+            
+            # excludedFields = ['user','file','company_name','address','owner_name','years_in_current_business','current_business_structure','date_of_statement', 'id', 'business_id', 'financial_footnotes']
+            # fields = FinancialFlashReport._meta.get_fields()
+            # column_names = [field.name for field in fields if field.name not in excludedFields]
+            cash_from_sales = 0
+            gross_cash_income = 0
+            cash_operating_expenses = 0
+            other_income = 0
+            net_cash_after_operations = 0
+            m1_net_deductions = 0
+            m2_net_deductions = 0
+            ending_cash_position = 0
+            depreciation = 0
+            amortization = 0
+            interest = 0
+            nre = 0
+            owners_management_fees = 0
+            cash_flow = 0
+            address = ""
+            for x in secondSet:
+                try:
+                    cash_from_sales = x.cash_from_sales + cash_from_sales
+                    gross_cash_income = x.gross_cash_income + gross_cash_income
+                    cash_operating_expenses = x.cash_operating_expenses + cash_operating_expenses
+                    other_income = x.other_income + other_income
+                    net_cash_after_operations = x.net_cash_after_operations + net_cash_after_operations
+                    m1_net_deductions = x.m1_net_deductions + m1_net_deductions
+                    m2_net_deductions = x.m2_net_deductions + m2_net_deductions
+                    ending_cash_position = x.ending_cash_position + ending_cash_position
+                    depreciation = x.depreciation + depreciation
+                    amortization = x.amortization + amortization
+                    interest = x.interest + interest
+                    nre = x.nre + nre
+                    owners_management_fees = x.owners_management_fees + owners_management_fees
+                    cash_flow = x.cash_flow + cash_flow
+                    address = x.address 
+                    company_name = x.company_name
+                    operational_cash= x.operational_cash
+                    current_business_structure= x.current_business_structure + ", " + x.current_business_structure
+                except:
+                    pass        
+            newFile = FinancialFlashReport(user=user,
+                                            company_name=company_name,
+                                            owner_name= x.owner_name,
+                                            address=address,
+                                            years_in_current_business= x.years_in_current_business,
+                                            current_business_structure= current_business_structure,
+                                            date_of_statement= x.date_of_statement,
+                                            cash_from_sales= cash_from_sales,
+                                            gross_cash_income= gross_cash_income,
+                                            cash_operating_expenses= cash_operating_expenses,
+                                            other_income= other_income,
+                                            net_cash_after_operations= net_cash_after_operations,
+                                            m1_net_deductions= m1_net_deductions,
+                                            m2_net_deductions= m2_net_deductions,
+                                            ending_cash_position= ending_cash_position,
+                                            depreciation= depreciation,
+                                            amortization= amortization,
+                                            interest= interest,
+                                            nre= nre,
+                                            owners_management_fees= owners_management_fees,
+                                            cash_flow= cash_flow,
+                                            operational_cash= operational_cash,
+                                            consolidated= 1
+                                            )
+            newFile.save()
 
-    bi = BasicInformation.objects.all()
-    oy1 = OperatingYears.objects.all()
-    pfs = PersonalFinancialStatement.objects.all()
-    ffr = FinancialFlashReport.objects.all()
+    consolidated = FinancialFlashReport.objects.filter(consolidated=1)
 
+    business_structure_split = consolidated[0].current_business_structure.split(", ")
+    
     context = {
         'bi': bi,
         'oy1': oy1,
         'pfs': pfs,
+        'finalReport': finalReport,
         'ffr': ffr,
         'state': oy1[0].state,
+        'consolidated': consolidated,
+        "business_structure_split": business_structure_split,
     }
     
     return render(request, 'practiceReport.html', context)

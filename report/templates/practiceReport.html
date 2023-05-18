@@ -1,3 +1,5 @@
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -285,187 +287,277 @@
     </div>
     <br>
     <br>
-    <div class="financialFlashReports" style="width: 100vw; ">
-        <h2>FINANCIAL FLASH RPT - CUTTER HIGHLANDS RANCH</h2>
-        <div class="top-portion" style=" display: flex; flex-direction: column; width: 100%;">
-            <h4 style="background-color: rgb(214, 18, 214); width: 100%;">General Customer Information</h4>
-            <div style="display: flex; flex-direction: column; justify-content: flex-start;">
-                <p>Company Name: <b>Cutter Highlands Ranch, LLC</b> </p> 
-                <p>Address: <b>2188 Wynterbrook Dr, Highlands Ranch, CO 80126</b> </p> 
-                <p>Owners Name(s): <b>John Cutter, Jamey Cutter</b> </p> 
-                <p>How many years in current business: <b>7.5</b> </p>
-                <div style="display: flex; flex-direction: row; justify-content: space-between; width: 1000px;">
-                    <b>Current Business Structure: </b> 
-                    <div>
-                        <div style="display: flex; flex-direction: column; width: 100%;">
-                            <b style="background-color: rgba(254, 166, 2, 0.61); width: 100%;">Cutter Highlands Ranch, LLC</b>
-                            <b>Owners: John & Jamey Cutter, Locations: Highlands Ranch (1505), SouthGlenn(1528)</b>
-                        </div>
-                        <br>
-                        <div style="display: flex; flex-direction: column; ">
-                            <b style="background-color: rgba(254, 166, 2, 0.61); width: 100%;">Cutter Highlands Ranch, LLC</b>
-                            <b>Owners: John & Jamey Cutter, Locations: Highlands Ranch (1505), SouthGlenn(1528)</b>
-                        </div>
+    
+    {%for data in consolidated%}
+    <div class="consolidated" style="width: 100vw; ">
+                {% if forloop.first %}
+                <h2>FINANCIAL FLASH RPT - Consolidated</h2>
+                <div class="top-portion" style=" display: flex; flex-direction: column; width: 100%;">
+                    <h4 style="background-color: rgb(214, 18, 214); width: 100%;">General Customer Information</h4>
+                    <div style="display: flex; flex-direction: column; justify-content: flex-start;">
+                        <p>Company Name: <b>{{data.company_name}}</b> </p> 
+                        <p>Address: <b>{{data.address}}</b> </p> 
+                        <p>Owners Name(s): <b>{{data.owner_name}}</b> </p> 
+                        <p>How many years in current business: <b>{{data.years_in_current_business}}</b> </p>
+                        <div style="display: flex; flex-direction: row; justify-content: space-between; width: 1000px;">
+                            <b>Current Business Structure: </b> 
+                            <div>
+                                {% for part in business_structure_split %}
+                                <div style="display: flex; flex-direction: column; width: 100%;">
+                                    <b style="background-color: rgba(254, 166, 2, 0.61); width: 100%;">{{data.company_name}}</b>
+                                    <b>Owners: {{data.owner_name}}, Locations: {{part}}</b>
+                                </div>
+                                <br>
+                                {%endfor%}
+                            </div>
+                        </div> 
                     </div>
-                </div> 
-            </div>
-        </div>
-        <br>
-        <br>
-        <div class="taxYears" style="display: flex; flex-direction: row; justify-content: space-around; background-color: lightgoldenrodyellow;">
-            <p style="text-align: center;">Type of Statement <br>
-                # of Months: <br>
-               Date of Statement:</p>
-            <p style="text-align: center;">Tax <br> 12 <br> 12/31/14</p>
-            <p style="text-align: center;">Tax <br> 12 <br> 12/31/15</p>
-            <p style="text-align: center;">Tax <br> 12 <br> 12/31/16</p>
-            <p style="text-align: center;">Year End PL <br> 12 <br> 12/31/17</p>
-        </div>
-        <br>
-        <br>
-        <div class="cash-flow-forecast-flash" style="border: 1px solid black;">
-            <p style="text-align: center;"><b>Cash Flow Forecast Flash</b></p>
-            <div style="display: flex; flex-direction: row; justify-content: space-around;">
-                <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                    <p style="text-align: center;"><b>Cash from Sales</b></p>
-                    <p style="text-align: center;">Gross Cash Income</p>
-                    <p style="text-align: center;">Cash Operating Expenses</p>
-                    <p style="text-align: center;">Other Income (Expense)</p>
-                    <p style="text-align: center;">Net Cash after Operations</p>
-                    <p style="text-align: center;">M1 Net Deductions</p>
-                    <p style="text-align: center;">M2 Net Deductions</p>
-                    <p style="text-align: center;">Ending Cash Position</p>
-                    <p style="text-align: center;">Addbacks</p>
-                    <p style="text-align: center;">Depreciation</p>
-                    <p style="text-align: center;">Amortization</p>
-                    <p style="text-align: center;">Interest</p>
-                    <p style="text-align: center;">NRE</p>
-                    <p style="text-align: center;">Owners Management Fees</p>
-                    <p style="text-align: center;">Cash Flow</p>
                 </div>
-                <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                    <p style="text-align: center;"><b>456</b></p>
-                    <p style="text-align: center;">213</p>
-                    <p style="text-align: center;">124</p>
-                    <p style="text-align: center;">324</p>
-                    <p style="text-align: center;">235</p>
-                    <p style="text-align: center;">654</p>
-                    <p style="text-align: center;">654</p>
-                    <p style="text-align: center;">645</p>
-                    <p style="text-align: center;">3456</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">9786</p>
-                    <p style="text-align: center;">534</p>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                    <p style="text-align: center;"><b>456</b></p>
-                    <p style="text-align: center;">213</p>
-                    <p style="text-align: center;">124</p>
-                    <p style="text-align: center;">324</p>
-                    <p style="text-align: center;">235</p>
-                    <p style="text-align: center;">654</p>
-                    <p style="text-align: center;">654</p>
-                    <p style="text-align: center;">645</p>
-                    <p style="text-align: center;">3456</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">9786</p>
-                    <p style="text-align: center;">534</p>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                    <p style="text-align: center;"><b>456</b></p>
-                    <p style="text-align: center;">213</p>
-                    <p style="text-align: center;">124</p>
-                    <p style="text-align: center;">324</p>
-                    <p style="text-align: center;">235</p>
-                    <p style="text-align: center;">654</p>
-                    <p style="text-align: center;">654</p>
-                    <p style="text-align: center;">645</p>
-                    <p style="text-align: center;">3456</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">9786</p>
-                    <p style="text-align: center;">534</p>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                    <p style="text-align: center;"><b>456</b></p>
-                    <p style="text-align: center;">213</p>
-                    <p style="text-align: center;">124</p>
-                    <p style="text-align: center;">324</p>
-                    <p style="text-align: center;">235</p>
-                    <p style="text-align: center;">654</p>
-                    <p style="text-align: center;">654</p>
-                    <p style="text-align: center;">645</p>
-                    <p style="text-align: center;">3456</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">3567</p>
-                    <p style="text-align: center;">9786</p>
-                    <p style="text-align: center;">534</p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <br>
-        <div class="operationsAbilityToCoverNewDebt" style="border: 1px solid black;">
-            <p style="text-align: center;"><b>Operations Ability to Cover new debt</b></p>
-            <div style="display: flex; flex-direction: row; justify-content: space-around;">
-                <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                    <p style="text-align: center;"><b>Operational Cash</b></p>
-                    <p style="text-align: center;"><b>Gross Cash Income</b> </p>
-                    <p style="text-align: center; background-color: yellow;">New Debt Service</p>
-                    <p style="text-align: center;">= Surplus</p>
-                    <p style="text-align: center; background-color: lightgreen;">Coverage Ratio</p>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                    <p style="text-align: center;"><b>456</b></p>
-                    <p style="text-align: center;">213</p>
-                    <p style="text-align: center;">124</p>
-                    <p style="text-align: center;">324</p>
-                    <p style="text-align: center;">235</p>
+                {% endif %}
+                    <br>
+                    <br>
+                {% if forloop.first %}
+                <div class="taxYears" style="display: flex; flex-direction: row; justify-content: space-around; background-color: lightgoldenrodyellow;">
+                        <p style="text-align: center;">Type of Statement <br># of Months: <br>Date of Statement:</p>
+                        {%for data in consolidated%}
+                        {%if not forloop.last%}
+                        <p style="text-align: center;">Tax <br> 12 <br>{{data.date_of_statement}}</p>
+                        {%else%}
+                        <p style="text-align: center;">Tax <br> 12 <br>{{data.date_of_statement}}</p>
+                        {%endif%}
+                        {%endfor%}
+                    </div>
+                    {% endif %}
 
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                    <p style="text-align: center;"><b>456</b></p>
-                    <p style="text-align: center;">213</p>
-                    <p style="text-align: center;">124</p>
-                    <p style="text-align: center;">324</p>
-                    <p style="text-align: center;">235</p>
+                    <br>
+                <br>
+                    {% if forloop.first %}
+                <div class="cash-flow-forecast-flash" style="border: 1px solid black;">
+                <p style="text-align: center;"><b>Cash Flow Forecast Flash</b></p>
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                        <p style="text-align: center;"><b>Cash from Sales</b></p>
+                        <p style="text-align: center;">Gross Cash Income</p>
+                        <p style="text-align: center;">Cash Operating Expenses</p>
+                        <p style="text-align: center;">Other Income (Expense)</p>
+                        <p style="text-align: center;">Net Cash after Operations</p>
+                        <p style="text-align: center;">M1 Net Deductions</p>
+                        <p style="text-align: center;">M2 Net Deductions</p>
+                        <p style="text-align: center;">Ending Cash Position</p>
+                        <p style="text-align: center;">Addbacks</p>
+                        <p style="text-align: center;">Depreciation</p>
+                        <p style="text-align: center;">Amortization</p>
+                        <p style="text-align: center;">Interest</p>
+                        <p style="text-align: center;">NRE</p>
+                        <p style="text-align: center;">Owners Management Fees</p>
+                        <p style="text-align: center;">Cash Flow</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if forloop.first %}
+                    {%for data in consolidated%}
 
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                    <p style="text-align: center;"><b>456</b></p>
-                    <p style="text-align: center;">213</p>
-                    <p style="text-align: center;">124</p>
-                    <p style="text-align: center;">324</p>
-                    <p style="text-align: center;">235</p>
-            
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: space-around;">
-                    <p style="text-align: center;"><b>456</b></p>
-                    <p style="text-align: center;">213</p>
-                    <p style="text-align: center;">124</p>
-                    <p style="text-align: center;">324</p>
-                    <p style="text-align: center;">235</p>
+                    <div style="display: flex; flex-direction: column; justify-content: space-around;">
+
+                        <p style="text-align: center;">{{data.cash_from_sales}}</p>
+
+                        <p style="text-align: center;">{{data.gross_cash_income}}</p>
+                        
+                        <p style="text-align: center;">{{data.cash_operating_expenses}}</p>
+                        
+                        <p style="text-align: center;">{{data.other_income}}</p>
+                        
+                        <p style="text-align: center;">{{data.net_cash_after_operations}}</p>
+                        
+                        <p style="text-align: center;">{{data.m1_net_deductions}}</p>
+                        
+                        <p style="text-align: center;">{{data.m2_net_deductions}}</p>
+                        
+                        <p style="text-align: center;">{{data.ending_cash_position}}</p>
+                        
+                        <p style="text-align: center; visibility: hidden;"></p>
+                        
+                        <p style="text-align: center;">{{data.depreciation}}</p>
+                        
+                        <p style="text-align: center;">{{data.amortization}}</p>
+                        
+                        <p style="text-align: center;">{{data.interest}}</p>
+                        
+                        <p style="text-align: center;">{{data.nre}}</p>
+                        
+                        <p style="text-align: center;">{{data.owners_management_fees}}</p>
+                        
+                        <p style="text-align: center;">{{data.cash_flow}}</p>
+                    </div> 
                 
+                    {%endfor%}
+                    {% endif %}
                 </div>
             </div>
+            <br>
+            <br>
+                    {% if forloop.first %}
+            <div class="operationsAbilityToCoverNewDebt" style="border: 1px solid black;">
+                <p style="text-align: center;"><b>Operations Ability to Cover new debt</b></p>
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                        <p style="text-align: center;"><b>Operational Cash</b></p>
+                        <p style="text-align: center;"><b>Gross Cash Income</b> </p>
+                        <p style="text-align: center; background-color: yellow;">New Debt Service</p>
+                        <p style="text-align: center;">= Surplus</p>
+                        <p style="text-align: center; background-color: lightgreen;">Coverage Ratio</p>
+                    </div>
+                    {% endif %}
+                    {% if forloop.first %}
+                {%for data in consolidated%}
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                        <p style="text-align: center;"><b>{{data.cash_flow}}</b></p>
+                        <p style="text-align: center;">{{data.cash_flow}}</p>
+                        <p style="text-align: center;">{{data.cash_flow}}</p>
+                        <p style="text-align: center;">{{data.cash_flow}}</p>
+                        <p style="text-align: center;">{{data.cash_flow}}</p>
+                    </div>
+                    {%endfor%}
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+            <br>
+            {% if forloop.first %}
+            <div class="financialFootnotes" style="border: 1px solid black;">
+                <p style="text-align: center;"><b>Financial Footnotes</b> </p>
+                <p>{{data.footnotes}}</p>
+            </div>
+            {% endif %}
         </div>
-        <br>
-        <br>
-        <div class="financialFootnotes" style="border: 1px solid black;">
-            <p style="text-align: center;"><b>Financial Footnotes</b> </p>
-            <p>-CHR has no debt</p>
+        {%endfor%}
+    
+     {%for business in ffr%}
+    <div class="financialFlashReports" style="width: 100vw; ">
+            {%for data in business.items%}
+                {% if forloop.first %}
+                <h2>FINANCIAL FLASH RPT - {{data.company_name}}</h2>
+                <div class="top-portion" style=" display: flex; flex-direction: column; width: 100%;">
+                    <h4 style="background-color: rgb(214, 18, 214); width: 100%;">General Customer Information</h4>
+                    <div style="display: flex; flex-direction: column; justify-content: flex-start;">
+                        <p>Company Name: <b>{{data.company_name}}</b> </p> 
+                        <p>Address: <b>{{data.address}}</b> </p> 
+                        <p>Owners Name(s): <b>{{data.owner_name}}</b> </p> 
+                        <p>How many years in current business: <b>{{data.years_in_current_business}}</b> </p>
+                        <div style="display: flex; flex-direction: row; justify-content: space-between; width: 1000px;">
+                            <b>Current Business Structure: </b> 
+                            <div>
+                                <div style="display: flex; flex-direction: column; width: 100%;">
+                                    <b style="background-color: rgba(254, 166, 2, 0.61); width: 100%;">{{data.company_name}}</b>
+                                    <b>Owners: {{data.owner_name}}, Locations: {{data.current_business_structure}}</b>
+                                </div>
+                                <br>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                {% endif %}
+                    <br>
+                    <br>
+                {% if forloop.first %}
+                <div class="taxYears" style="display: flex; flex-direction: row; justify-content: space-around; background-color: lightgoldenrodyellow;">
+                        <p style="text-align: center;">Type of Statement <br># of Months: <br>Date of Statement:</p>
+                        {%for data in business.items%}
+                        {%if not forloop.last%}
+                        <p style="text-align: center;">Tax <br> 12 <br>{{data.date_of_statement}}</p>
+                        {%else%}
+                        <p style="text-align: center;">Tax <br> 12 <br>{{data.date_of_statement}}</p>
+                        {%endif%}
+                        {%endfor%}
+                    </div>
+                    {% endif %}
+
+                    <br>
+                <br>
+                    {% if forloop.first %}
+                <div class="cash-flow-forecast-flash" style="border: 1px solid black;">
+                <p style="text-align: center;"><b>Cash Flow Forecast Flash</b></p>
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                        <p style="text-align: center;"><b>Cash from Sales</b></p>
+                        <p style="text-align: center;">Gross Cash Income</p>
+                        <p style="text-align: center;">Cash Operating Expenses</p>
+                        <p style="text-align: center;">Other Income (Expense)</p>
+                        <p style="text-align: center;">Net Cash after Operations</p>
+                        <p style="text-align: center;">M1 Net Deductions</p>
+                        <p style="text-align: center;">M2 Net Deductions</p>
+                        <p style="text-align: center;">Ending Cash Position</p>
+                        <p style="text-align: center;">Addbacks</p>
+                        <p style="text-align: center;">Depreciation</p>
+                        <p style="text-align: center;">Amortization</p>
+                        <p style="text-align: center;">Interest</p>
+                        <p style="text-align: center;">NRE</p>
+                        <p style="text-align: center;">Owners Management Fees</p>
+                        <p style="text-align: center;">Cash Flow</p>
+                    </div>
+                    {% endif %}
+                {% if forloop.first %}
+                {%for data in business.items%}
+                    <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                        <p style="text-align: center;"><b>{{data.cash_from_sales}}</b></p>
+                        <p style="text-align: center;">{{data.gross_cash_income}}</p>
+                        <p style="text-align: center;">{{data.cash_operating_expenses}}</p>
+                        <p style="text-align: center;">{{data.other_income}}</p>
+                        <p style="text-align: center;">{{data.net_cash_after_operations}}</p>
+                        <p style="text-align: center;">{{data.m1_net_deductions}}</p>
+                        <p style="text-align: center;">{{data.m2_net_deductions}}</p>
+                        <p style="text-align: center;">{{data.ending_cash_position}}</p>
+                        <p style="text-align: center; visibility: hidden;"></p>
+                        <p style="text-align: center;">{{data.depreciation}}</p>
+                        <p style="text-align: center;">{{data.amortization}}</p>
+                        <p style="text-align: center;">{{data.interest}}</p>
+                        <p style="text-align: center;">{{data.nre}}</p>
+                        <p style="text-align: center;">{{data.owners_management_fees}}</p>
+                        <p style="text-align: center;">{{data.cash_flow}}</p>
+                    </div> 
+                    {%endfor%}
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+            <br>
+                    {% if forloop.first %}
+            <div class="operationsAbilityToCoverNewDebt" style="border: 1px solid black;">
+                <p style="text-align: center;"><b>Operations Ability to Cover new debt</b></p>
+                <div style="display: flex; flex-direction: row; justify-content: space-around;">
+                    <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                        <p style="text-align: center;"><b>Operational Cash</b></p>
+                        <p style="text-align: center;"><b>Gross Cash Income</b> </p>
+                        <p style="text-align: center; background-color: yellow;">New Debt Service</p>
+                        <p style="text-align: center;">= Surplus</p>
+                        <p style="text-align: center; background-color: lightgreen;">Coverage Ratio</p>
+                    </div>
+                    {% endif %}
+                    {% if forloop.first %}
+                {%for data in business.items%}
+                <div style="display: flex; flex-direction: column; justify-content: space-around;">
+                        <p style="text-align: center;"><b>{{data.operational_cash}}</b></p>
+                        <p style="text-align: center;">{{data.cash_flow}}</p>
+                        <p style="text-align: center;">{{data.cash_flow}}</p>
+                        <p style="text-align: center;">{{data.cash_flow}}</p>
+                        <p style="text-align: center;">{{data.cash_flow}}</p>
+                    </div>
+                    {%endfor%}
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+            <br>
+            {% if forloop.first %}
+            <div class="financialFootnotes" style="border: 1px solid black;">
+                <p style="text-align: center;"><b>Financial Footnotes</b> </p>
+                <p>{{data.footnotes}}</p>
+            </div>
+            {% endif %}
+            {%endfor%}
         </div>
-    </div>
+        {%endfor%} 
+            
     
 </body>
 </html>

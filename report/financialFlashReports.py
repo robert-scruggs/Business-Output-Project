@@ -38,69 +38,29 @@ secondListoffiles = ["report/pdfs/6_2018 ITR_1065_OVERHOLT INVESTMENTS LLC SAFE 
 #                     #"report/pdfs/6_2019 ITR_1065 Delish Brands, LLC.pdf",
 #                     #"report/pdfs/6_2020 ITR_Delish Real Estate  Holdings, LLC.pdf",
 #     ]
-# pdf = pdfplumber.open(secondListoffiles[0])
-# text = pdf.pages[6].extract_text()
-# if "cBalance. Subtract line 1b from line 1a" in text:
-#     print("found")
+
+pdf = pdfplumber.open(listoffiles[0])
+text = pdf.pages[3].extract_text().replace("~","").replace("\n", " ").split(" ").index("ENDING")
+# print(pdf.pages[3].extract_text().replace("~","").replace("\n", " ").split(" ")[text + 1],pdf.pages[3].extract_text().replace("~","").replace("\n", " ").split(" ")[text + 2], pdf.pages[3].extract_text().replace("~","").replace("\n", " ").split(" ")[text + 3])
 
 
-# pdf = pdfplumber.open(secondListoffiles[1])
-# text = pdf.pages[8].extract_text()
-# print(text)
-# print("------------------------------------")
 
-# pdf = pdfplumber.open(secondListoffiles[2])
-# text = pdf.pages[4].extract_text()
-# print(text)
-# print("------------------------------------")
 
-# randomFile = 'report/pdfs/report/pdfs/5_2020 ITR_Josh & Laura Overholt.pdf'
-# amortization does not work for all files, needs consistent files
-# def getAmortization(fileList):
-#     myList = []
-#     for file in fileList:
-#         pdf = pdfplumber.open(file)
-#         for page in pdf.pages:
-#             currList = page.extract_text().split(" ")
-#             for item in currList:
-#                 if "Amortization(a)\n(b)" and "Amortizable" in item:
-#                     print("found")
-#                     print(page.extract_text(), page.page_number)
-#                     myList.append(page.extract_text())
-#     ammortizationList = []
-#     counter = 1
-#     for x in range(1, len(myList), 2):
-#         keepTrack = myList[counter].split(" ").index("44") + 1
-#         amortization = myList[counter].split(" ")[keepTrack].split("\n")[
-#             0].replace(",", "").replace(".", "")
-#         ammortizationList.append(int(amortization))
-#         counter = counter + 2
-
-#     for x in ammortizationList:
-#         print(x)
-#     return ammortizationList
-
-# def getAmortization(fileList):
-#     myList = []
-#     for file in fileList:
-#         pdf = pdfplumber.open(file)
-#         for page in pdf.pages:
-#             currList = page.extract_text()
-#             if "44 Total. Add amounts in column (f). See the instructions for where to report" and "\nPart VI Amortization(a)\n(b) (c) (d) (e) (f)\n" in currList:
-#                 print("found", page.page_number)
-#                 myList.append(page.extract_text())
-#                 break    
-#     ammortizationList = []
-#     counter = 0
-#     for x in range(0, len(myList)):
-#         keepTrack = myList[counter].split(" ").index("44") + 1
-#         amortization = myList[counter].split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
-#         ammortizationList.append(int(amortization))
-#         counter = counter + 1
-
-#     for x in ammortizationList:
-#         print(x)
-#     return ammortizationList
+def getStatementDate(file):
+    try:
+        extractedText = ""
+        pageNumber = 0
+        pdf = pdfplumber.open(file)
+        for page in pdf.pages:
+            currList = page.extract_text()
+            if "TAX" and 'RETURN' and 'FILING' and 'INSTRUCTIONS' in currList:
+                extractedText = page.extract_text()
+                pageNumber = page.page_number
+                break    
+        text = extractedText.replace("~","").replace("\n", " ").split(" ").index("ENDING")
+        return extractedText.replace("~","").replace("\n", " ").split(" ")[text + 1].capitalize() + " " +  extractedText.replace("~","").replace("\n", " ").split(" ")[text + 2] + extractedText.replace("~","").replace("\n", " ").split(" ")[text + 3]
+    except:
+        return 213
 
 @lru_cache(maxsize=None)
 def getAmortization(file):
@@ -117,7 +77,7 @@ def getAmortization(file):
         amortization = extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
         return int(amortization)
     except:
-        return 213
+        return 213, file
 
 # interest does not work for all files, needs consistent files
 # print(getAmortization("report/pdfs/6_2017_CHR Amended 2017 Taxes.pdf"))
@@ -138,7 +98,7 @@ def getInterest(file):
         interest = extractedText.split(" ")[keepTrack].split("\n")[0].replace(",", "").replace(".", "")
         return int(interest)
     except:
-        return 213
+        return 213, file
 
 
 @lru_cache(maxsize=None)
@@ -162,11 +122,12 @@ def getDepreciation(file):
             elif "14 Depreciation not claimed on Form 1125-A or elsewhere on return (attach Form 4562)" in currList:
                 print("found", page.page_number, file)
                 extractedText = page.extract_text()
-                return depreciationMethod("14")       
+                return depreciationMethod("14")      
     except:
-        return 213
+        return 213, file
 # print(getDepreciation("report/pdfs/6_2014 Income Tax Return_CUTTER RESTAURANT GROUP, LLC 1065 CLNT.pdf"))
-
+# for x in listoffiles:
+#     print(getDepreciation(x))
 
 @lru_cache(maxsize=None)
 def getCashFromSales(file):

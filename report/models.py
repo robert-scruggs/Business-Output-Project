@@ -10,6 +10,7 @@ class BasicInformation(models.Model):
     operating_company = models.CharField(max_length=200)
     parent_company = models.CharField( max_length=200)
     business_owners = models.CharField(max_length=200)
+    locations = models.CharField(max_length=200)
     primary_business_address = models.CharField(max_length=200)
     proposed_loan_needs = models.CharField(max_length=200)
     list_of_report_outcomes = models.TextField(max_length=40000)
@@ -67,13 +68,12 @@ class PersonalFinancialStatement(models.Model):
 class FinancialFlashReport(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     file = models.FileField(storage=DefaultStorage(), unique=False)
-    company_name = models.CharField(max_length=200)
-    address = models.CharField(max_length=200)
-    owner_name = models.CharField(max_length=200)
-    years_in_current_business = models.IntegerField(null=True)
-    current_business_structure = models.CharField(max_length=200)
-    date_of_statement = models.CharField(max_length=200)
-    marketable_securities = models.IntegerField(null=True)
+    company_name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    owner_name = models.CharField(max_length=255)
+    years_in_current_business = models.CharField(max_length=255)
+    current_business_structure = models.CharField(max_length=255)
+    date_of_statement = models.CharField(max_length=255)
     cash_from_sales = models.IntegerField(null=True)
     gross_cash_income = models.IntegerField(null=True)
     cash_operating_expenses = models.IntegerField(null=True)
@@ -95,7 +95,11 @@ class FinancialFlashReport(models.Model):
     coverage_ratio = models.IntegerField(null=True)
     financial_footnotes = models.CharField(max_length=10000)
     business_id = models.IntegerField(null=True)
+    consolidated = models.BooleanField(null=True)
     
+    def __str__(self):
+        return f"MyModel(company_name={self.company_name}, address={self.address}, owner_name={self.owner_name}, years_in_current_business={self.years_in_current_business}, current_business_structure={self.current_business_structure}, date_of_statement={self.date_of_statement}, cash_from_sales={self.cash_from_sales}, gross_cash_income={self.gross_cash_income}, cash_operating_expenses={self.cash_operating_expenses}, other_income={self.other_income}, net_cash_after_operations={self.net_cash_after_operations}, m1_net_deductions={self.m1_net_deductions}, m2_net_deductions={self.m2_net_deductions}, ending_cash_position={self.ending_cash_position}, depreciation={self.depreciation}, amortization={self.amortization}, interest={self.interest}, nre={self.nre}, owners_management_fees={self.owners_management_fees}, cash_flow={self.cash_flow}, operational_cash={self.operational_cash}, available_cash={self.available_cash}, new_debt_services={self.new_debt_services}, surplus={self.surplus}, coverage_ratio={self.coverage_ratio}, financial_footnotes={self.financial_footnotes}, business_id={self.business_id})"
+ 
 
 
     

@@ -1,5 +1,4 @@
 import pdfplumber
-import time
 files = ['report/pfs/2_PFS_JAMEY CUTTER_052018s.pdf','report/pfs/2_PFS_N MERAIYA FEB 2018.pdf']
 
 # pdf = pdfplumber.open(files[0])
