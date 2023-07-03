@@ -10,18 +10,17 @@ https://docs.djangoproject.com/en/4.1/howto/deployment/wsgi/
 import os
 import sys
 
-from django.core.wsgi import get_wsgi_application
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "BRO.settings")
-
-application = get_wsgi_application()
-
-# Get the path of the current file (WSGI configuration file)
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
 # Get the path of the project directory (assuming the BRO module is in the project root)
-project_dir = os.path.dirname(current_dir)
+project_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Add the project directory to sys.path
 sys.path.append(project_dir)
+
+# Set the DJANGO_SETTINGS_MODULE environment variable
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "BRO.settings")
+
+# Get the Django WSGI application
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+
 
