@@ -15,7 +15,8 @@ project_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Add the project directory to sys.path
 sys.path.append(project_dir)
-
+sys.path.append('Job Projects/BRO/report/financialStatements')
+sys.path.append('Job Projects/BRO/report/financialFlashReports')
 # Set the DJANGO_SETTINGS_MODULE environment variable
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "BRO.settings")
 
